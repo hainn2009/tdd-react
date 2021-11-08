@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { UserSignupPage } from './UserSignupPage';
 
@@ -80,6 +80,15 @@ describe('UserSignupPage', () => {
       button = container.querySelector('button');
       return rendered;
     };
+    const mockAsyncDelay = () => {
+      return jest.fn().mockImplementation(() => {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve({});
+          }, 300);
+        });
+      });
+    };
     it('set the displayName value into the state', () => {
       const { queryByPlaceholderText } = render(<UserSignupPage />);
       const displayNameInput = queryByPlaceholderText('Your display name');
@@ -137,6 +146,29 @@ describe('UserSignupPage', () => {
         password: 'P4ssword',
       };
       expect(actions.postSignup).toHaveBeenCalledWith(expectedUserObject);
+    });
+    it('does not allow user click the Sign up button when there is an ongoing api call', () => {
+      const actions = { postSignup: mockAsyncDelay() };
+      setupForSubmit({ actions });
+      fireEvent.click(button);
+      fireEvent.click(button);
+
+      expect(actions.postSignup).toHaveBeenCalledTimes(1);
+    });
+    it('display a spinner when there is an ongoing api call', () => {
+      const actions = { postSignup: mockAsyncDelay() };
+      const { queryByText } = setupForSubmit({ actions });
+      fireEvent.click(button);
+      const spinner = queryByText('Loading...');
+      expect(spinner).toBeInTheDocument();
+    });
+    it('hides the spinner when api call complete successfully', () => {
+      // const actions = { postSignup: mockAsyncDelay() };
+      // const { queryByText } = setupForSubmit({ actions });
+      // fireEvent.click(button);
+      // const spinner = queryByText('Loading...');
+      // expect(spinner).toBeInTheDocument();
+      // It use deprecated waitfordomchange so not working
     });
   });
 });
