@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { UserSignupPage } from './UserSignupPage';
 
@@ -169,6 +169,22 @@ describe('UserSignupPage', () => {
       // const spinner = queryByText('Loading...');
       // expect(spinner).toBeInTheDocument();
       // It use deprecated waitfordomchange so not working
+    });
+    it('hides the spinner after api call finishes with error', () => {
+      // const actions = {
+      //   postSignup: jest.fn().mockImplementation(() => {
+      //     return new Promise((resolve, reject) => {
+      //       setTimeout(() => {
+      //         reject({ response: { data: {} } });
+      //       }, 300);
+      //     });
+      //   }),
+      // };
+      // const { queryByText } = setupForSubmit({ actions });
+      // fireEvent.click(button);
+      // await waitForDomChange();
+      // const spinner = queryByText('Loading...');
+      // expect(spinner).not.toBeInTheDocument();
     });
   });
 });
