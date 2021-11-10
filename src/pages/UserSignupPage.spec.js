@@ -1,6 +1,5 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
 import { UserSignupPage } from './UserSignupPage';
 
 describe('UserSignupPage', () => {
@@ -185,6 +184,24 @@ describe('UserSignupPage', () => {
       // await waitForDomChange();
       // const spinner = queryByText('Loading...');
       // expect(spinner).not.toBeInTheDocument();
+    });
+    it('display the validation error for displayName field when error is received', async () => {
+      const actions = {
+        postSignup: jest.fn().mockRejectedValue({
+          response: {
+            data: {
+              validationErrors: {
+                displayName: 'Cannot be null',
+              },
+            },
+          },
+        }),
+      };
+      const { findByText } = setupForSubmit({ actions });
+      fireEvent.click(button);
+      // findByText will wait for the component to appear
+      const errorMessage = await findByText('Cannot be null');
+      expect(errorMessage).toBeInTheDocument();
     });
   });
 });
