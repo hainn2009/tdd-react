@@ -169,7 +169,7 @@ describe('UserSignupPage', () => {
       // expect(spinner).toBeInTheDocument();
       // It use deprecated waitfordomchange so not working
     });
-    it('hides the spinner after api call finishes with error', () => {
+    it('hides the spinner after api call finishes with error testing', () => {
       // const actions = {
       //   postSignup: jest.fn().mockImplementation(() => {
       //     return new Promise((resolve, reject) => {
@@ -202,6 +202,89 @@ describe('UserSignupPage', () => {
       // findByText will wait for the component to appear
       const errorMessage = await findByText('Cannot be null');
       expect(errorMessage).toBeInTheDocument();
+    });
+    it('disables the signup button when password and repeat password are not match', () => {
+      setupForSubmit();
+      fireEvent.change(passwordRepeatInput, changeEvent('new-password'));
+      expect(button).toBeDisabled();
+    });
+    it('disables the signup button when repeat password and password are not match', () => {
+      setupForSubmit();
+      fireEvent.change(passwordInput, changeEvent('new-password'));
+      expect(button).toBeDisabled();
+    });
+    it('display error message when repeat password and password are mismatch', () => {
+      const { queryByText } = setupForSubmit();
+      fireEvent.change(passwordRepeatInput, changeEvent('new-password'));
+      const mismatchPasswordWarning = queryByText('Does not match to password');
+      expect(mismatchPasswordWarning).toBeInTheDocument();
+    });
+    it('display error message when password and repeat password are mismatch', () => {
+      const { queryByText } = setupForSubmit();
+      fireEvent.change(passwordInput, changeEvent('new-password'));
+      const mismatchPasswordWarning = queryByText('Does not match to password');
+      expect(mismatchPasswordWarning).toBeInTheDocument();
+    });
+    it('hides the validation error for displayName field when user change the content of displayName', async () => {
+      const actions = {
+        postSignup: jest.fn().mockRejectedValue({
+          response: {
+            data: {
+              validationErrors: {
+                displayName: 'Cannot be null',
+              },
+            },
+          },
+        }),
+      };
+      const { findByText, queryByText } = setupForSubmit({ actions });
+      fireEvent.click(button);
+      // findByText will wait for the component to appear
+      await findByText('Cannot be null');
+      // change the displayName
+      fireEvent.change(displayNameInput, changeEvent('new-displayName'));
+      const errorMessage = queryByText('Cannot be null');
+      expect(errorMessage).not.toBeInTheDocument();
+    });
+    it('hides the validation error for username field when user change the content of username', async () => {
+      const actions = {
+        postSignup: jest.fn().mockRejectedValue({
+          response: {
+            data: {
+              validationErrors: {
+                username: 'Cannot be null',
+              },
+            },
+          },
+        }),
+      };
+      const { findByText, queryByText } = setupForSubmit({ actions });
+      fireEvent.click(button);
+      // findByText will wait for the component to appear
+      await findByText('Cannot be null');
+      fireEvent.change(usernameInput, changeEvent('new-username'));
+      const errorMessage = queryByText('Cannot be null');
+      expect(errorMessage).not.toBeInTheDocument();
+    });
+    it('hides the validation error for password field when user change the content of password', async () => {
+      const actions = {
+        postSignup: jest.fn().mockRejectedValue({
+          response: {
+            data: {
+              validationErrors: {
+                password: 'Password cannot be null',
+              },
+            },
+          },
+        }),
+      };
+      const { findByText, queryByText } = setupForSubmit({ actions });
+      fireEvent.click(button);
+      // findByText will wait for the component to appear
+      await findByText('Password cannot be null');
+      fireEvent.change(passwordInput, changeEvent('new-username'));
+      const errorMessage = queryByText('Password cannot be null');
+      expect(errorMessage).not.toBeInTheDocument();
     });
   });
 });

@@ -7,24 +7,45 @@ export class UserSignupPage extends React.Component {
     username: '',
     password: '',
     passwordRepeat: '',
+    email: '',
     pendingApiCall: false,
     errors: {},
+    passwordRepeatConfimed: true,
   };
   onChangeDisplayName = (event) => {
     const value = event.target.value;
-    this.setState({ displayName: value });
+    const errors = { ...this.state.errors };
+    delete errors.displayName;
+    this.setState({ displayName: value, errors });
   };
   onChangeUsername = (event) => {
     const value = event.target.value;
-    this.setState({ username: value });
+    const errors = { ...this.state.errors };
+    delete errors.username;
+    this.setState({ username: value, errors });
   };
   onChangePassword = (event) => {
     const value = event.target.value;
-    this.setState({ password: value });
+    const passwordRepeatConfimed = this.state.passwordRepeat === value;
+    const errors = { ...this.state.errors };
+    delete errors.password;
+    errors.passwordRepeat = passwordRepeatConfimed
+      ? ''
+      : 'Does not match to password';
+    this.setState({ password: value, passwordRepeatConfimed, errors });
   };
   onChangePasswordRepeat = (event) => {
     const value = event.target.value;
-    this.setState({ passwordRepeat: value });
+    const passwordRepeatConfimed = this.state.password === value;
+    const errors = { ...this.state.errors };
+    errors.passwordRepeat = passwordRepeatConfimed
+      ? ''
+      : 'Does not match to password';
+    this.setState({ passwordRepeat: value, passwordRepeatConfimed, errors });
+  };
+  onChangeEmail = (event) => {
+    const value = event.target.value;
+    this.setState({ email: value });
   };
   onClickSignup = () => {
     const user = {
@@ -47,6 +68,7 @@ export class UserSignupPage extends React.Component {
       })
       .catch((apiError) => {
         let errors = { ...this.state.errors };
+
         if (apiError.response.data && apiError.response.data.validationErrors) {
           errors = { ...apiError.response.data.validationErrors };
         }
@@ -66,44 +88,56 @@ export class UserSignupPage extends React.Component {
             hasError={this.state.errors.displayName && true}
             error={this.state.errors.displayName}
           />
-          <div className='invalid-feedback'>
-            {this.state.errors.displayName}
-          </div>
         </div>
         <div className='col-12 mb-3'>
-          <label>Username:</label>
-          <input
-            className='form-control'
-            placeholder='Your username'
-            value={this.state.username}
-            onChange={this.onChangeUsername}
+          <Input
+            label='Email'
+            placeholder='Your email'
+            value={this.state.email}
+            onChange={this.onChangeEmail}
+            hasError={this.state.errors.email && true}
+            error={this.state.errors.email}
           />
         </div>
         <div className='col-12 mb-3'>
-          <label>Password:</label>
-          <input
-            className='form-control'
+          <Input
+            label='User name'
+            placeholder='Your username'
+            value={this.state.username}
+            onChange={this.onChangeUsername}
+            hasError={this.state.errors.username && true}
+            error={this.state.errors.username}
+          />
+        </div>
+        <div className='col-12 mb-3'>
+          <Input
+            label='Password'
             placeholder='Your password'
             type='password'
             value={this.state.password}
             onChange={this.onChangePassword}
+            hasError={this.state.errors.password && true}
+            error={this.state.errors.password}
           />
         </div>
         <div className='col-12 mb-3'>
-          <label>Password repeat:</label>
-          <input
-            className='form-control'
+          <Input
+            label='Password repeat'
             placeholder='Repeat your password'
             type='password'
             value={this.state.passwordRepeat}
             onChange={this.onChangePasswordRepeat}
+            hasError={this.state.errors.passwordRepeat && true}
+            error={this.state.errors.passwordRepeat}
           />
         </div>
         <div className='text-center'>
           <button
             className='btn btn-primary'
             onClick={this.onClickSignup}
-            disabled={this.state.pendingApiCall}
+            disabled={
+              this.state.pendingApiCall || !this.state.passwordRepeatConfimed
+            }
           >
             {this.state.pendingApiCall && (
               <div className='spinner-border text-light spinner-border-sm mr-1'>

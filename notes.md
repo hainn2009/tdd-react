@@ -24,4 +24,27 @@
   - Change it() to xit() to skip unneed test
   - There are 2 test cases were not tested because waitfordomchange is deprecated
   - Finish clip 12 folder 3
-  - clip 6, 7, 8 folder 4
+  - https://testing-library.com/docs/guide-disappearance/
+  - Finish clip 6 Display validation errors: only test case, not get errors from backend
+  - Finish at 6:42 clip 7 Create a customs form input component because we have many same fields: displayName, username, email, password,...
+  - In setupTests.js file: config code for all tests will run
+- 10/11/2021
+  - Fínish clip 7: none, stop at 18:07 all test case haven't pass, haven't seen the errors when test with backend
+- 11/11/2021
+  - The backend will send the response object like that
+  ```js
+  response: {
+    data: {
+      path: '',
+      timestamp: '',
+      message: '',
+      validataionErrors: {
+        username: '',
+        email: '',
+        password: '',
+      },
+    },
+  }
+  ```
+  THe problem why we cannot see the errors is frontend have díplayName, repeatPassword, not have email and backend have email, not have displayName, repeatPassword
+  - 5:30 clip 8 folder 4
