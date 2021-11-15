@@ -46,5 +46,13 @@
     },
   }
   ```
-  THe problem why we cannot see the errors is frontend have díplayName, repeatPassword, not have email and backend have email, not have displayName, repeatPassword
-  - 5:30 clip 8 folder 4
+  The problem why we cannot see the errors is frontend have díplayName, repeatPassword, not have email and backend have email, not have displayName, repeatPassword
+  - Our new nodejs app have some details validation check on frontend different than our previous social app:
+    - Password match
+    - Email valid: hide error message when user start change the email
+  - Finish clip 8 folder 4
+- 15/11/2021
+
+  - Clip 7 folder 5
+
+  - Clip 7, 8, 9, 10, 11 folder 5 Login

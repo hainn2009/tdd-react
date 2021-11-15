@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import UserSignupPage from './pages/UserSignupPage';
+import { LoginPage } from './pages/LoginPage';
 import reportWebVitals from './reportWebVitals';
 import * as apiCalls from './api/apiCall';
 
@@ -11,7 +12,8 @@ const actions = {
 
 ReactDOM.render(
   <React.StrictMode>
-    <UserSignupPage actions={actions} />
+    {/* <UserSignupPage actions={actions} /> */}
+    <LoginPage />
   </React.StrictMode>,
   document.getElementById('root')
 );
