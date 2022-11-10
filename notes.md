@@ -52,7 +52,7 @@
     - Email valid: hide error message when user start change the email
   - Finish clip 8 folder 4
 - 15/11/2021
-
-  - Clip 7 folder 5
-
+  - Finish clip 7 Login page folder 5
+  - Stop at 1:03 clip 8 Handling input changes folder 5
+  -
   - Clip 7, 8, 9, 10, 11 folder 5 Login

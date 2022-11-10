@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import { LoginPage } from './LoginPage';
 
 describe('Login Page', () => {
@@ -32,6 +32,22 @@ describe('Login Page', () => {
       const { container } = render(<LoginPage />);
       const loginButton = container.querySelector('button');
       expect(loginButton).toBeInTheDocument();
+    });
+
+    describe('Interactions', () => {
+      const changeEvent = (content) => {
+        return {
+          target: {
+            value: content,
+          },
+        };
+      };
+      it('set the value of input username to the state', () => {
+        const { queryByPlaceholderText } = render(<LoginPage />);
+        const inputUsername = queryByPlaceholderText('Your username');
+        fireEvent.change(inputUsername, changeEvent('my-user-name'));
+        expect(inputUsername).toHaveValue('my-user-name');
+      });
     });
   });
 });
