@@ -1,10 +1,13 @@
 {
-	"folders": [
-		{
-			"path": "."
-		}
-	],
-	"settings": {
-		"editor.formatOnSave": true
-	}
+    "folders": [
+        {
+            "path": "."
+        },
+        {
+            "path": "../tdd-react-backend"
+        }
+    ],
+    "settings": {
+        "editor.formatOnSave": true
+    }
 }

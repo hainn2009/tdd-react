@@ -1,16 +1,90 @@
+import { useState } from "react";
+import axios from "axios";
+
 export default function () {
+    const [username, setUsername] = useState();
+    const [email, setEmail] = useState();
+    const [password, setPassword] = useState();
+    const [passwordRepeat, setPasswordRepeat] = useState();
+    const [apiProgress, setApiProgress] = useState(false);
     return (
-        <div>
-            <h1>Sign Up</h1>
-            <label htmlFor="username">Username</label>
-            <input type="text" id="username" />
-            <label htmlFor="email">Email</label>
-            <input type="text" id="email" />
-            <label htmlFor="password">Password</label>
-            <input type="password" id="password" />
-            <label htmlFor="passwordRepeat">Password Repeat</label>
-            <input type="password" id="passwordRepeat" />
-            <button disabled>Sign Up</button>
+        <div className="col-lg-6 offset-lg-3 col-md-8 offset-md-2">
+            <form className="card mt-5">
+                <div className="card-header">
+                    <h1 className="text-center">Sign Up</h1>
+                </div>
+                <div className="card-body">
+                    <div className="mb-3">
+                        <label htmlFor="username" className="form-label">
+                            Username
+                        </label>
+                        <input
+                            type="text"
+                            id="username"
+                            onChange={(e) => setUsername(e.target.value)}
+                            className="form-control"
+                        />
+                    </div>
+
+                    <div className="mb-3">
+                        <label htmlFor="email" className="form-label">
+                            Email
+                        </label>
+                        <input
+                            type="text"
+                            id="email"
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="form-control"
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="password" className="form-label">
+                            Password
+                        </label>
+                        <input
+                            type="password"
+                            id="password"
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="form-control"
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="passwordRepeat" className="form-label">
+                            Password Repeat
+                        </label>
+                        <input
+                            type="password"
+                            id="passwordRepeat"
+                            onChange={(e) => setPasswordRepeat(e.target.value)}
+                            className="form-control"
+                        />
+                    </div>
+                    <div className="text-center">
+                        <button
+                            className="btn btn-primary"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                // setApiProgress(true);
+                                axios.post("/API/1.0/users", { username, email, password });
+                                // fetch("API/1.0/users", {
+                                //     method: "POST",
+                                //     headers: {
+                                //         "Content-Type": "application/json",
+                                //     },
+                                //     body: JSON.stringify({
+                                //         username,
+                                //         email,
+                                //         password,
+                                //     }),
+                                // });
+                            }}
+                            disabled={!password || !passwordRepeat || password !== passwordRepeat || apiProgress}
+                        >
+                            Sign Up
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
     );
 }
