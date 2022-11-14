@@ -67,21 +67,8 @@ describe("Signup Page", () => {
         );
         beforeAll(() => server.listen());
         beforeEach(() => {
-            server.resetHandlers();
             requestBody = null;
             counter = 0;
-        });
-        afterAll(() => server.close());
-        it("enables the Sign Up button when password and password repeat are the same", () => {
-            render(<SignUpPage />);
-            const passwordInput = screen.getByLabelText("Password");
-            const passwordRepeatInput = screen.getByLabelText("Password Repeat");
-            userEvent.type(passwordInput, "Password");
-            userEvent.type(passwordRepeatInput, "Password");
-            const button = screen.queryByRole("button", { name: "Sign Up" });
-            expect(button).toBeEnabled();
-        });
-        it("call the backend when click the Sign Up button", async () => {
             render(<SignUpPage />);
             const usernameInput = screen.getByLabelText("Username");
             const emailInput = screen.getByLabelText("Email");
@@ -91,12 +78,21 @@ describe("Signup Page", () => {
             userEvent.type(emailInput, "user1@mail.com");
             userEvent.type(passwordInput, "Password");
             userEvent.type(passwordRepeatInput, "Password");
+        });
+        afterAll(() => server.close());
+        it("enables the Sign Up button when password and password repeat are the same", () => {
+            // const passwordInput = screen.getByLabelText("Password");
+            // const passwordRepeatInput = screen.getByLabelText("Password Repeat");
+            // userEvent.type(passwordInput, "Password");
+            // userEvent.type(passwordRepeatInput, "Password");
             const button = screen.queryByRole("button", { name: "Sign Up" });
-
+            expect(button).toBeEnabled();
+        });
+        it("call the backend when click the Sign Up button", async () => {
+            const button = screen.queryByRole("button", { name: "Sign Up" });
             // const mockfn = jest.fn();
             // // axios.post = mockfn;
             // window.fetch = mockfn;
-
             userEvent.click(button);
 
             await screen.findByText("Please check your e-mail to activate your account");
@@ -106,15 +102,6 @@ describe("Signup Page", () => {
             expect(requestBody).toEqual({ username: "user1", email: "user1@mail.com", password: "Password" });
         });
         it("disables sign up button when there is an ongoing api call", async () => {
-            render(<SignUpPage />);
-            const usernameInput = screen.getByLabelText("Username");
-            const emailInput = screen.getByLabelText("Email");
-            const passwordInput = screen.getByLabelText("Password");
-            const passwordRepeatInput = screen.getByLabelText("Password Repeat");
-            userEvent.type(usernameInput, "user1");
-            userEvent.type(emailInput, "user1@mail.com");
-            userEvent.type(passwordInput, "Password");
-            userEvent.type(passwordRepeatInput, "Password");
             const button = screen.queryByRole("button", { name: "Sign Up" });
 
             // const mockfn = jest.fn();
@@ -130,15 +117,6 @@ describe("Signup Page", () => {
             expect(counter).toBe(1);
         });
         it("display the spinner after click the Sign Up button", async () => {
-            render(<SignUpPage />);
-            const usernameInput = screen.getByLabelText("Username");
-            const emailInput = screen.getByLabelText("Email");
-            const passwordInput = screen.getByLabelText("Password");
-            const passwordRepeatInput = screen.getByLabelText("Password Repeat");
-            userEvent.type(usernameInput, "user1");
-            userEvent.type(emailInput, "user1@mail.com");
-            userEvent.type(passwordInput, "Password");
-            userEvent.type(passwordRepeatInput, "Password");
             const button = screen.queryByRole("button", { name: "Sign Up" });
             expect(screen.queryByRole("status", { hidden: true })).not.toBeInTheDocument();
             userEvent.click(button);
@@ -146,15 +124,6 @@ describe("Signup Page", () => {
             expect(spinner).toBeInTheDocument();
         });
         it("display account activation notification after successful sign up request", async () => {
-            render(<SignUpPage />);
-            const usernameInput = screen.getByLabelText("Username");
-            const emailInput = screen.getByLabelText("Email");
-            const passwordInput = screen.getByLabelText("Password");
-            const passwordRepeatInput = screen.getByLabelText("Password Repeat");
-            userEvent.type(usernameInput, "user1");
-            userEvent.type(emailInput, "user1@mail.com");
-            userEvent.type(passwordInput, "Password");
-            userEvent.type(passwordRepeatInput, "Password");
             const button = screen.queryByRole("button", { name: "Sign Up" });
             const message = "Please check your e-mail to activate your account";
             expect(screen.queryByText(message)).not.toBeInTheDocument();
@@ -163,15 +132,6 @@ describe("Signup Page", () => {
             expect(text).toBeInTheDocument();
         });
         it("hides sign up form after successful sign up request", async () => {
-            render(<SignUpPage />);
-            const usernameInput = screen.getByLabelText("Username");
-            const emailInput = screen.getByLabelText("Email");
-            const passwordInput = screen.getByLabelText("Password");
-            const passwordRepeatInput = screen.getByLabelText("Password Repeat");
-            userEvent.type(usernameInput, "user1");
-            userEvent.type(emailInput, "user1@mail.com");
-            userEvent.type(passwordInput, "Password");
-            userEvent.type(passwordRepeatInput, "Password");
             const button = screen.queryByRole("button", { name: "Sign Up" });
             const message = "Please check your e-mail to activate your account";
             const form = screen.getByTestId("form-sign-up");
@@ -180,6 +140,21 @@ describe("Signup Page", () => {
                 expect(form).not.toBeInTheDocument();
             });
             // await waitForElementToBeRemoved(form);
+        });
+        it("displays validation message for username", async () => {
+            server.use(
+                rest.post("/api/1.0/users", (req, res, ctx) => {
+                    return res(
+                        ctx.status(400),
+                        ctx.json({
+                            validationErrors: { username: "Username cannot be null" },
+                        })
+                    );
+                })
+            );
+            const button = screen.queryByRole("button", { name: "Sign Up" });
+            userEvent.click(button);
+            expect(await screen.findByText("Username cannot be null")).toBeInTheDocument();
         });
     });
 });

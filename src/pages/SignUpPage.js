@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { handleRequest } from "msw";
 
 export default function () {
     const [username, setUsername] = useState();
@@ -8,6 +9,31 @@ export default function () {
     const [passwordRepeat, setPasswordRepeat] = useState();
     const [apiProgress, setApiProgress] = useState(false);
     const [signUpSuccess, setSignUpSuccess] = useState(false);
+    const [errors, setErrors] = useState();
+
+    const handleSubmit = async (e) => {
+        try {
+            e.preventDefault();
+            setApiProgress(true);
+            await axios.post("/API/1.0/users", { username, email, password });
+            setSignUpSuccess(true);
+            // fetch("API/1.0/users", {
+            //     method: "POST",
+            //     headers: {
+            //         "Content-Type": "application/json",
+            //     },
+            //     body: JSON.stringify({
+            //         username,
+            //         email,
+            //         password,
+            //     }),
+            // });
+        } catch (error) {
+            if (error.response.status === 400) {
+                setErrors(error.response.data.validationErrors);
+            }
+        }
+    };
     return (
         <div className="col-lg-6 offset-lg-3 col-md-8 offset-md-2">
             {!signUpSuccess && (
@@ -26,6 +52,7 @@ export default function () {
                                 onChange={(e) => setUsername(e.target.value)}
                                 className="form-control"
                             />
+                            <span>{errors && errors.username}</span>
                         </div>
 
                         <div className="mb-3">
@@ -64,29 +91,12 @@ export default function () {
                         <div className="text-center">
                             <button
                                 className="btn btn-primary"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    setApiProgress(true);
-                                    axios
-                                        .post("/API/1.0/users", { username, email, password })
-                                        .then((res) => setSignUpSuccess(true));
-                                    // fetch("API/1.0/users", {
-                                    //     method: "POST",
-                                    //     headers: {
-                                    //         "Content-Type": "application/json",
-                                    //     },
-                                    //     body: JSON.stringify({
-                                    //         username,
-                                    //         email,
-                                    //         password,
-                                    //     }),
-                                    // });
-                                }}
+                                onClick={handleSubmit}
                                 disabled={!password || !passwordRepeat || password !== passwordRepeat || apiProgress}
                             >
                                 {apiProgress && (
                                     <span
-                                        class="spinner-border spinner-border-sm"
+                                        className="spinner-border spinner-border-sm"
                                         role="status"
                                         aria-hidden="true"
                                     ></span>
