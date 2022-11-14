@@ -1,5 +1,5 @@
 import SignUpPage from "./SignUpPage";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor, waitForElementToBeRemoved } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import axios from "axios";
 import { setupServer } from "msw/node";
@@ -99,7 +99,7 @@ describe("Signup Page", () => {
 
             userEvent.click(button);
 
-            await new Promise((resolve) => setTimeout(resolve, 500));
+            await screen.findByText("Please check your e-mail to activate your account");
 
             // const firstCallOfMockFuntion = mockfn.mock.calls[0];
             // const body = JSON.parse(firstCallOfMockFuntion[1].body);
@@ -123,12 +123,63 @@ describe("Signup Page", () => {
 
             userEvent.click(button);
             userEvent.click(button);
-
-            await new Promise((resolve) => setTimeout(resolve, 500));
+            await screen.findByText("Please check your e-mail to activate your account");
 
             // const firstCallOfMockFuntion = mockfn.mock.calls[0];
             // const body = JSON.parse(firstCallOfMockFuntion[1].body);
-            expect(counter).toBe(2);
+            expect(counter).toBe(1);
+        });
+        it("display the spinner after click the Sign Up button", async () => {
+            render(<SignUpPage />);
+            const usernameInput = screen.getByLabelText("Username");
+            const emailInput = screen.getByLabelText("Email");
+            const passwordInput = screen.getByLabelText("Password");
+            const passwordRepeatInput = screen.getByLabelText("Password Repeat");
+            userEvent.type(usernameInput, "user1");
+            userEvent.type(emailInput, "user1@mail.com");
+            userEvent.type(passwordInput, "Password");
+            userEvent.type(passwordRepeatInput, "Password");
+            const button = screen.queryByRole("button", { name: "Sign Up" });
+            expect(screen.queryByRole("status", { hidden: true })).not.toBeInTheDocument();
+            userEvent.click(button);
+            const spinner = screen.getByRole("status", { hidden: true });
+            expect(spinner).toBeInTheDocument();
+        });
+        it("display account activation notification after successful sign up request", async () => {
+            render(<SignUpPage />);
+            const usernameInput = screen.getByLabelText("Username");
+            const emailInput = screen.getByLabelText("Email");
+            const passwordInput = screen.getByLabelText("Password");
+            const passwordRepeatInput = screen.getByLabelText("Password Repeat");
+            userEvent.type(usernameInput, "user1");
+            userEvent.type(emailInput, "user1@mail.com");
+            userEvent.type(passwordInput, "Password");
+            userEvent.type(passwordRepeatInput, "Password");
+            const button = screen.queryByRole("button", { name: "Sign Up" });
+            const message = "Please check your e-mail to activate your account";
+            expect(screen.queryByText(message)).not.toBeInTheDocument();
+            userEvent.click(button);
+            const text = await screen.findByText(message);
+            expect(text).toBeInTheDocument();
+        });
+        it("hides sign up form after successful sign up request", async () => {
+            render(<SignUpPage />);
+            const usernameInput = screen.getByLabelText("Username");
+            const emailInput = screen.getByLabelText("Email");
+            const passwordInput = screen.getByLabelText("Password");
+            const passwordRepeatInput = screen.getByLabelText("Password Repeat");
+            userEvent.type(usernameInput, "user1");
+            userEvent.type(emailInput, "user1@mail.com");
+            userEvent.type(passwordInput, "Password");
+            userEvent.type(passwordRepeatInput, "Password");
+            const button = screen.queryByRole("button", { name: "Sign Up" });
+            const message = "Please check your e-mail to activate your account";
+            const form = screen.getByTestId("form-sign-up");
+            userEvent.click(button);
+            await waitFor(() => {
+                expect(form).not.toBeInTheDocument();
+            });
+            // await waitForElementToBeRemoved(form);
         });
     });
 });
