@@ -30,8 +30,9 @@ export default function () {
             // });
         } catch (error) {
             if (error.response.status === 400) {
-                // setErrors(error.response.data.validationErrors);
+                setErrors(error.response.data.validationErrors);
             }
+            setApiProgress(false);
         }
     };
     return (

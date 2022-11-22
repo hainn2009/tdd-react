@@ -67,6 +67,10 @@ describe("Signup Page", () => {
         );
         beforeAll(() => server.listen());
         beforeEach(() => {
+            // quan trong vi no se thiet lap lai rest.post cho chung ta
+            // nhung truong hop nao can override handler thi viet truc tiep tai tung case
+            server.resetHandlers(); 
+
             requestBody = null;
             counter = 0;
             render(<SignUpPage />);
@@ -155,6 +159,24 @@ describe("Signup Page", () => {
             const button = screen.queryByRole("button", { name: "Sign Up" });
             userEvent.click(button);
             expect(await screen.findByText("Username cannot be null")).toBeInTheDocument();
+        });
+        it("hide the spinner and enable the sign up button after api response received", async () => {
+            server.use(
+                rest.post("/api/1.0/users", (req, res, ctx) => {
+                    return res(
+                        ctx.status(400),
+                        ctx.json({
+                            validationErrors: { username: "Username cannot be null" },
+                        })
+                    );
+                })
+            );
+            const button = screen.queryByRole("button", { name: "Sign Up" });
+            userEvent.click(button);
+            await screen.findByText("Username cannot be null")
+            // get the spinner
+            expect(screen.queryByRole("status")).not.toBeInTheDocument();
+            expect(button).toBeEnabled();    
         });
     });
 });
