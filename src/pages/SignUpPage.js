@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { handleRequest } from "msw";
+import Input from "../components/InputComponent";
 
 export default function () {
     const [username, setUsername] = useState();
@@ -43,7 +44,13 @@ export default function () {
                         <h1 className="text-center">Sign Up</h1>
                     </div>
                     <div className="card-body">
-                        <div className="mb-3">
+                        <Input
+                            id="username"
+                            label="Username"
+                            onChange={(e) => setUsername(e.target.value)}
+                            help={errors && errors.username}
+                        />
+                        {/* <div className="mb-3">
                             <label htmlFor="username" className="form-label">
                                 Username
                             </label>
@@ -54,7 +61,7 @@ export default function () {
                                 className="form-control"
                             />
                             <span>{errors && errors.username}</span>
-                        </div>
+                        </div> */}
 
                         <div className="mb-3">
                             <label htmlFor="email" className="form-label">
