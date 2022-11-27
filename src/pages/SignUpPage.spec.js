@@ -59,6 +59,9 @@ describe("Signup Page", () => {
                 return res(ctx.status(200));
             })
         );
+        let passwordInput;
+        let passwordRepeatInput;
+        let signUpButton;
         beforeAll(() => server.listen());
         beforeEach(() => {
             requestBody = null;
@@ -66,12 +69,13 @@ describe("Signup Page", () => {
             render(<SignUpPage />);
             const usernameInput = screen.getByLabelText("Username");
             const emailInput = screen.getByLabelText("Email");
-            const passwordInput = screen.getByLabelText("Password");
-            const passwordRepeatInput = screen.getByLabelText("Password Repeat");
+            passwordInput = screen.getByLabelText("Password");
+            passwordRepeatInput = screen.getByLabelText("Password Repeat");
             userEvent.type(usernameInput, "user1");
             userEvent.type(emailInput, "user1@mail.com");
             userEvent.type(passwordInput, "Password");
             userEvent.type(passwordRepeatInput, "Password");
+            signUpButton = screen.queryByRole("button", { name: "Sign Up" });
         });
         afterEach(() => {
             // quan trong vi no se thiet lap lai rest.post cho chung ta
@@ -175,6 +179,11 @@ describe("Signup Page", () => {
             // get the spinner
             expect(screen.queryByRole("status")).not.toBeInTheDocument();
             expect(button).toBeEnabled();
+        });
+        it("displays error message when password repeat mismatch", async () => {
+            userEvent.type(passwordInput, "Password");
+            userEvent.type(passwordRepeatInput, "Mismatch Password");
+            await screen.findByText("Password mismatch");
         });
     });
 });

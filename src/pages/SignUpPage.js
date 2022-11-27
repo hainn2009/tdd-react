@@ -63,7 +63,14 @@ export default function () {
                             help={errors && errors.password}
                             type="password"
                         />
-                        <div className="mb-3">
+                        <Input
+                            id="passwordRepeat"
+                            label="Password Repeat"
+                            onChange={(e) => setPasswordRepeat(e.target.value)}
+                            help={password !== passwordRepeat ? "Password mismatch" : ""}
+                            type="password"
+                        />
+                        {/* <div className="mb-3">
                             <label htmlFor="passwordRepeat" className="form-label">
                                 Password Repeat
                             </label>
@@ -73,7 +80,7 @@ export default function () {
                                 onChange={(e) => setPasswordRepeat(e.target.value)}
                                 className="form-control"
                             />
-                        </div>
+                        </div> */}
                         <div className="text-center">
                             <button
                                 className="btn btn-primary"
