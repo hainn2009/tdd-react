@@ -50,6 +50,12 @@ export default function () {
                             onChange={(e) => setUsername(e.target.value)}
                             help={errors && errors.username}
                         />
+                        <Input
+                            id="email"
+                            label="Email"
+                            onChange={(e) => setEmail(e.target.value)}
+                            help={errors && errors.email}
+                        />
                         {/* <div className="mb-3">
                             <label htmlFor="username" className="form-label">
                                 Username
@@ -63,7 +69,7 @@ export default function () {
                             <span>{errors && errors.username}</span>
                         </div> */}
 
-                        <div className="mb-3">
+                        {/* <div className="mb-3">
                             <label htmlFor="email" className="form-label">
                                 Email
                             </label>
@@ -73,7 +79,7 @@ export default function () {
                                 onChange={(e) => setEmail(e.target.value)}
                                 className="form-control"
                             />
-                        </div>
+                        </div> */}
                         <div className="mb-3">
                             <label htmlFor="password" className="form-label">
                                 Password

@@ -7,50 +7,44 @@ import { rest } from "msw";
 
 describe("Signup Page", () => {
     describe("Layout", () => {
-        it("has header", () => {
+        beforeEach(() => {
             render(<SignUpPage />);
+        });
+        it("has header", () => {
             const header = screen.queryByRole("heading", { name: "Sign Up" });
             expect(header).toBeInTheDocument();
         });
         it("has username input", () => {
             // const { container } = render(<SignUpPage />);
             // const input = container.querySelector("input");
-            render(<SignUpPage />);
             const input = screen.getByLabelText("Username");
             expect(input).toBeInTheDocument();
         });
         it("has email input", () => {
-            render(<SignUpPage />);
             const input = screen.getByLabelText("Email");
             expect(input).toBeInTheDocument();
         });
         it("has password input", () => {
-            render(<SignUpPage />);
             const input = screen.getByLabelText("Password");
             expect(input).toBeInTheDocument();
         });
         it("has password type for password input", () => {
-            render(<SignUpPage />);
             const input = screen.getByLabelText("Password");
             expect(input.type).toBe("password");
         });
         it("has password repeat input", () => {
-            render(<SignUpPage />);
             const input = screen.getByLabelText("Password Repeat");
             expect(input).toBeInTheDocument();
         });
         it("has password type for password repeat input", () => {
-            render(<SignUpPage />);
             const input = screen.getByLabelText("Password Repeat");
             expect(input.type).toBe("password");
         });
         it("has Sign up button", () => {
-            render(<SignUpPage />);
             const button = screen.queryByRole("button", { name: "Sign Up" });
             expect(button).toBeInTheDocument();
         });
         it("disables the Sign Up button initially", () => {
-            render(<SignUpPage />);
             const button = screen.queryByRole("button", { name: "Sign Up" });
             expect(button).toBeDisabled();
         });
@@ -59,18 +53,14 @@ describe("Signup Page", () => {
         let requestBody;
         let counter = 0;
         const server = setupServer(
-            rest.post("/api/1.0/users", (req, res, ctx) => {
-                requestBody = req.body;
+            rest.post("/api/1.0/users", async (req, res, ctx) => {
+                requestBody = await req.json();
                 counter += 1;
                 return res(ctx.status(200));
             })
         );
         beforeAll(() => server.listen());
         beforeEach(() => {
-            // quan trong vi no se thiet lap lai rest.post cho chung ta
-            // nhung truong hop nao can override handler thi viet truc tiep tai tung case
-            server.resetHandlers(); 
-
             requestBody = null;
             counter = 0;
             render(<SignUpPage />);
@@ -82,6 +72,11 @@ describe("Signup Page", () => {
             userEvent.type(emailInput, "user1@mail.com");
             userEvent.type(passwordInput, "Password");
             userEvent.type(passwordRepeatInput, "Password");
+        });
+        afterEach(() => {
+            // quan trong vi no se thiet lap lai rest.post cho chung ta
+            // nhung truong hop nao can override handler thi viet truc tiep tai tung case
+            server.resetHandlers();
         });
         afterAll(() => server.close());
         it("enables the Sign Up button when password and password repeat are the same", () => {
@@ -125,13 +120,20 @@ describe("Signup Page", () => {
             expect(screen.queryByRole("status", { hidden: true })).not.toBeInTheDocument();
             userEvent.click(button);
             const spinner = screen.getByRole("status", { hidden: true });
-            expect(spinner).toBeInTheDocument();
+            // Cần phải thực hiện việc waif for ở đây nghĩa là đợi cho các update state chạy hết
+            // Sau khi click button, nó còn gọi về backend, update state dựa trên kết quả trả về
+            // Bình thường thì test case kết thúc mà không chờ toàn bộ hành động update state
+            // Nên sẽ báo warning ở đây dù test case vẫn pass
+            await waitFor(() => {
+                expect(spinner).toBeInTheDocument();
+            });
         });
         it("display account activation notification after successful sign up request", async () => {
             const button = screen.queryByRole("button", { name: "Sign Up" });
             const message = "Please check your e-mail to activate your account";
             expect(screen.queryByText(message)).not.toBeInTheDocument();
             userEvent.click(button);
+            // cái này nghĩa là chờ cho đến khi
             const text = await screen.findByText(message);
             expect(text).toBeInTheDocument();
         });
@@ -145,20 +147,54 @@ describe("Signup Page", () => {
             });
             // await waitForElementToBeRemoved(form);
         });
-        it("displays validation message for username", async () => {
+        // it("displays validation message for username", async () => {
+        //     server.use(
+        //         rest.post("/api/1.0/users", (req, res, ctx) => {
+        //             return res(
+        //                 ctx.status(400),
+        //                 ctx.json({
+        //                     validationErrors: { username: "Username cannot be null" },
+        //                 })
+        //             );
+        //         })
+        //     );
+        //     const button = screen.queryByRole("button", { name: "Sign Up" });
+        //     userEvent.click(button);
+        //     expect(await screen.findByText("Username cannot be null")).toBeInTheDocument();
+        // });
+        // it("displays validation message for email", async () => {
+        //     server.use(
+        //         rest.post("/api/1.0/users", (req, res, ctx) => {
+        //             return res(
+        //                 ctx.status(400),
+        //                 ctx.json({
+        //                     validationErrors: { email: "E-mail cannot be null" },
+        //                 })
+        //             );
+        //         })
+        //     );
+        //     const button = screen.queryByRole("button", { name: "Sign Up" });
+        //     userEvent.click(button);
+        //     expect(await screen.findByText("E-mail cannot be null")).toBeInTheDocument();
+        // });
+        it.each`
+            field         | message
+            ${"username"} | ${"Username cannot be null"}
+            ${"email"}    | ${"E-mail cannot be null"}
+        `("displays $message for $field", async ({ field, message }) => {
             server.use(
                 rest.post("/api/1.0/users", (req, res, ctx) => {
                     return res(
                         ctx.status(400),
                         ctx.json({
-                            validationErrors: { username: "Username cannot be null" },
+                            validationErrors: { [field]: message },
                         })
                     );
                 })
             );
             const button = screen.queryByRole("button", { name: "Sign Up" });
             userEvent.click(button);
-            expect(await screen.findByText("Username cannot be null")).toBeInTheDocument();
+            expect(await screen.findByText(message)).toBeInTheDocument();
         });
         it("hide the spinner and enable the sign up button after api response received", async () => {
             server.use(
@@ -173,10 +209,10 @@ describe("Signup Page", () => {
             );
             const button = screen.queryByRole("button", { name: "Sign Up" });
             userEvent.click(button);
-            await screen.findByText("Username cannot be null")
+            await screen.findByText("Username cannot be null");
             // get the spinner
             expect(screen.queryByRole("status")).not.toBeInTheDocument();
-            expect(button).toBeEnabled();    
+            expect(button).toBeEnabled();
         });
     });
 });
