@@ -147,66 +147,28 @@ describe("Signup Page", () => {
             });
             // await waitForElementToBeRemoved(form);
         });
-        // it("displays validation message for username", async () => {
-        //     server.use(
-        //         rest.post("/api/1.0/users", (req, res, ctx) => {
-        //             return res(
-        //                 ctx.status(400),
-        //                 ctx.json({
-        //                     validationErrors: { username: "Username cannot be null" },
-        //                 })
-        //             );
-        //         })
-        //     );
-        //     const button = screen.queryByRole("button", { name: "Sign Up" });
-        //     userEvent.click(button);
-        //     expect(await screen.findByText("Username cannot be null")).toBeInTheDocument();
-        // });
-        // it("displays validation message for email", async () => {
-        //     server.use(
-        //         rest.post("/api/1.0/users", (req, res, ctx) => {
-        //             return res(
-        //                 ctx.status(400),
-        //                 ctx.json({
-        //                     validationErrors: { email: "E-mail cannot be null" },
-        //                 })
-        //             );
-        //         })
-        //     );
-        //     const button = screen.queryByRole("button", { name: "Sign Up" });
-        //     userEvent.click(button);
-        //     expect(await screen.findByText("E-mail cannot be null")).toBeInTheDocument();
-        // });
+        const generateValidationError = (field, message) =>
+            rest.post("/api/1.0/users", (req, res, ctx) => {
+                return res(
+                    ctx.status(400),
+                    ctx.json({
+                        validationErrors: { [field]: message },
+                    })
+                );
+            });
         it.each`
             field         | message
             ${"username"} | ${"Username cannot be null"}
             ${"email"}    | ${"E-mail cannot be null"}
+            ${"password"} | ${"Password cannot be null"}
         `("displays $message for $field", async ({ field, message }) => {
-            server.use(
-                rest.post("/api/1.0/users", (req, res, ctx) => {
-                    return res(
-                        ctx.status(400),
-                        ctx.json({
-                            validationErrors: { [field]: message },
-                        })
-                    );
-                })
-            );
+            server.use(generateValidationError(field, message));
             const button = screen.queryByRole("button", { name: "Sign Up" });
             userEvent.click(button);
             expect(await screen.findByText(message)).toBeInTheDocument();
         });
         it("hide the spinner and enable the sign up button after api response received", async () => {
-            server.use(
-                rest.post("/api/1.0/users", (req, res, ctx) => {
-                    return res(
-                        ctx.status(400),
-                        ctx.json({
-                            validationErrors: { username: "Username cannot be null" },
-                        })
-                    );
-                })
-            );
+            server.use(generateValidationError("username", "Username cannot be null"));
             const button = screen.queryByRole("button", { name: "Sign Up" });
             userEvent.click(button);
             await screen.findByText("Username cannot be null");

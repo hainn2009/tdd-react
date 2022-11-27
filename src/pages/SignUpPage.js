@@ -56,41 +56,13 @@ export default function () {
                             onChange={(e) => setEmail(e.target.value)}
                             help={errors && errors.email}
                         />
-                        {/* <div className="mb-3">
-                            <label htmlFor="username" className="form-label">
-                                Username
-                            </label>
-                            <input
-                                type="text"
-                                id="username"
-                                onChange={(e) => setUsername(e.target.value)}
-                                className="form-control"
-                            />
-                            <span>{errors && errors.username}</span>
-                        </div> */}
-
-                        {/* <div className="mb-3">
-                            <label htmlFor="email" className="form-label">
-                                Email
-                            </label>
-                            <input
-                                type="text"
-                                id="email"
-                                onChange={(e) => setEmail(e.target.value)}
-                                className="form-control"
-                            />
-                        </div> */}
-                        <div className="mb-3">
-                            <label htmlFor="password" className="form-label">
-                                Password
-                            </label>
-                            <input
-                                type="password"
-                                id="password"
-                                onChange={(e) => setPassword(e.target.value)}
-                                className="form-control"
-                            />
-                        </div>
+                        <Input
+                            id="password"
+                            label="Password"
+                            onChange={(e) => setPassword(e.target.value)}
+                            help={errors && errors.password}
+                            type="password"
+                        />
                         <div className="mb-3">
                             <label htmlFor="passwordRepeat" className="form-label">
                                 Password Repeat
