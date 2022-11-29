@@ -33,7 +33,7 @@ export default function () {
             if (error.response.status === 400) {
                 setErrors(error.response.data.validationErrors);
             }
-            setApiProgress(false);
+            // setApiProgress(false);
         }
     };
     return (
