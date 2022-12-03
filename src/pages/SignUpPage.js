@@ -17,7 +17,7 @@ export default function () {
             e.preventDefault();
             setApiProgress(true);
             await axios.post("/API/1.0/users", { username, email, password });
-            setSignUpSuccess(true);
+            // setSignUpSuccess(true);
             // fetch("API/1.0/users", {
             //     method: "POST",
             //     headers: {
