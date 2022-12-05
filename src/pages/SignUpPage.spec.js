@@ -62,13 +62,15 @@ describe("Signup Page", () => {
         let passwordInput;
         let passwordRepeatInput;
         let signUpButton;
+        let usernameInput;
+        let emailInput;
         beforeAll(() => server.listen());
         beforeEach(() => {
             requestBody = null;
             counter = 0;
             render(<SignUpPage />);
-            const usernameInput = screen.getByLabelText("Username");
-            const emailInput = screen.getByLabelText("Email");
+            usernameInput = screen.getByLabelText("Username");
+            emailInput = screen.getByLabelText("Email");
             passwordInput = screen.getByLabelText("Password");
             passwordRepeatInput = screen.getByLabelText("Password Repeat");
             userEvent.type(usernameInput, "user1");
@@ -184,6 +186,14 @@ describe("Signup Page", () => {
             userEvent.type(passwordInput, "Password");
             userEvent.type(passwordRepeatInput, "Mismatch Password");
             await screen.findByText("Password mismatch");
+        });
+        it("hide the spinner and enable the sign up button after api response received", async () => {
+            server.use(generateValidationError("username", "Username cannot be null"));
+            const button = screen.queryByRole("button", { name: "Sign Up" });
+            userEvent.click(button);
+            const validationError = await screen.findByText("Username cannot be null");
+            userEvent.type(usernameInput, "transformer");
+            expect(validationError).not.toBeInTheDocument();
         });
     });
 });
