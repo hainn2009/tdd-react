@@ -5,7 +5,7 @@ const Input = ({ id, label, onChange, help, type = "text" }) => {
                 {label}
             </label>
             <input type={type} id={id} onChange={onChange} className={`form-control ${help ? "is-invalid" : ""}`} />
-            <span className="invalid-feedback">{help}</span>
+            {help && <span className="invalid-feedback">{help}</span>}
         </div>
     );
 };

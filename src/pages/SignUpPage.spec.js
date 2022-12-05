@@ -187,12 +187,17 @@ describe("Signup Page", () => {
             userEvent.type(passwordRepeatInput, "Mismatch Password");
             await screen.findByText("Password mismatch");
         });
-        it("hide the spinner and enable the sign up button after api response received", async () => {
-            server.use(generateValidationError("username", "Username cannot be null"));
+        it.each`
+            field         | message                      | label
+            ${"username"} | ${"Username cannot be null"} | ${"Username"}
+            ${"email"}    | ${"E-mail cannot be null"}   | ${"Email"}
+            ${"password"} | ${"Password cannot be null"} | ${"Password"}
+        `("clear the validation error after $field field is updated", async ({ field, message, label }) => {
+            server.use(generateValidationError(field, message));
             const button = screen.queryByRole("button", { name: "Sign Up" });
             userEvent.click(button);
-            const validationError = await screen.findByText("Username cannot be null");
-            userEvent.type(usernameInput, "transformer");
+            const validationError = await screen.findByText(message);
+            userEvent.type(screen.queryByLabelText(label), "updated");
             expect(validationError).not.toBeInTheDocument();
         });
     });

@@ -47,19 +47,28 @@ export default function () {
                         <Input
                             id="username"
                             label="Username"
-                            onChange={(e) => setUsername(e.target.value)}
+                            onChange={(e) => {
+                                setUsername(e.target.value);
+                                setErrors({ ...errors, username: "" });
+                            }}
                             help={errors && errors.username}
                         />
                         <Input
                             id="email"
                             label="Email"
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={(e) => {
+                                setEmail(e.target.value);
+                                setErrors({ ...errors, email: "" });
+                            }}
                             help={errors && errors.email}
                         />
                         <Input
                             id="password"
                             label="Password"
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={(e) => {
+                                setPassword(e.target.value);
+                                setErrors({ ...errors, password: "" });
+                            }}
                             help={errors && errors.password}
                             type="password"
                         />
