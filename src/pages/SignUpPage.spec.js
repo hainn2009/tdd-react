@@ -4,6 +4,9 @@ import userEvent from "@testing-library/user-event";
 import axios from "axios";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
+import "../locale/i18n";
+import en from "../locale/en.json";
+import vn from "../locale/vn.json";
 
 describe("Signup Page", () => {
     describe("Layout", () => {
@@ -199,6 +202,45 @@ describe("Signup Page", () => {
             const validationError = await screen.findByText(message);
             userEvent.type(screen.queryByLabelText(label), "updated");
             expect(validationError).not.toBeInTheDocument();
+        });
+    });
+    describe("Internationalization", () => {
+        it("Initially display all texts in English", () => {
+            render(<SignUpPage />);
+            expect(screen.getByRole("heading", { name: en.signUp })).toBeInTheDocument();
+            expect(screen.getByRole("button", { name: en.signUp })).toBeInTheDocument();
+            expect(screen.getByLabelText(en.username)).toBeInTheDocument();
+            expect(screen.getByLabelText(en.email)).toBeInTheDocument();
+            expect(screen.getByLabelText(en.password)).toBeInTheDocument();
+            expect(screen.getByLabelText(en.passwordRepeat)).toBeInTheDocument();
+        });
+        it("Display all texts in Vietnamese after changing the language", () => {
+            render(<SignUpPage />);
+
+            const vietnameseToggle = screen.getByTitle("Tiếng Việt");
+            userEvent.click(vietnameseToggle);
+
+            expect(screen.getByRole("heading", { name: vn.signUp })).toBeInTheDocument();
+            expect(screen.getByRole("button", { name: vn.signUp })).toBeInTheDocument();
+            expect(screen.getByLabelText(vn.username)).toBeInTheDocument();
+            expect(screen.getByLabelText(vn.email)).toBeInTheDocument();
+            expect(screen.getByLabelText(vn.password)).toBeInTheDocument();
+            expect(screen.getByLabelText(vn.passwordRepeat)).toBeInTheDocument();
+        });
+        it("Display all texts in English after changing back from Vietnamese", () => {
+            render(<SignUpPage />);
+
+            const vietnameseToggle = screen.getByTitle("Tiếng Việt");
+            userEvent.click(vietnameseToggle);
+            const englishToggle = screen.getByTitle("English");
+            userEvent.click(englishToggle);
+
+            expect(screen.getByRole("heading", { name: en.signUp })).toBeInTheDocument();
+            expect(screen.getByRole("button", { name: en.signUp })).toBeInTheDocument();
+            expect(screen.getByLabelText(en.username)).toBeInTheDocument();
+            expect(screen.getByLabelText(en.email)).toBeInTheDocument();
+            expect(screen.getByLabelText(en.password)).toBeInTheDocument();
+            expect(screen.getByLabelText(en.passwordRepeat)).toBeInTheDocument();
         });
     });
 });

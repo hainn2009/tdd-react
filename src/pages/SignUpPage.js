@@ -1,7 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
 import { handleRequest } from "msw";
+import { useTranslation } from "react-i18next";
 import Input from "../components/InputComponent";
+import LanguageSelector from "../components/LanguageSelector";
 
 export default function () {
     const [username, setUsername] = useState();
@@ -11,6 +13,7 @@ export default function () {
     const [apiProgress, setApiProgress] = useState(false);
     const [signUpSuccess, setSignUpSuccess] = useState(false);
     const [errors, setErrors] = useState();
+    const { t } = useTranslation();
 
     const handleSubmit = async (e) => {
         try {
@@ -41,12 +44,12 @@ export default function () {
             {!signUpSuccess && (
                 <form className="card mt-5" data-testid="form-sign-up">
                     <div className="card-header">
-                        <h1 className="text-center">Sign Up</h1>
+                        <h1 className="text-center">{t("signUp")}</h1>
                     </div>
                     <div className="card-body">
                         <Input
                             id="username"
-                            label="Username"
+                            label={t("username")}
                             onChange={(e) => {
                                 setUsername(e.target.value);
                                 setErrors({ ...errors, username: "" });
@@ -55,7 +58,7 @@ export default function () {
                         />
                         <Input
                             id="email"
-                            label="Email"
+                            label={t("email")}
                             onChange={(e) => {
                                 setEmail(e.target.value);
                                 setErrors({ ...errors, email: "" });
@@ -64,7 +67,7 @@ export default function () {
                         />
                         <Input
                             id="password"
-                            label="Password"
+                            label={t("password")}
                             onChange={(e) => {
                                 setPassword(e.target.value);
                                 setErrors({ ...errors, password: "" });
@@ -74,7 +77,7 @@ export default function () {
                         />
                         <Input
                             id="passwordRepeat"
-                            label="Password Repeat"
+                            label={t("passwordRepeat")}
                             onChange={(e) => setPasswordRepeat(e.target.value)}
                             help={password !== passwordRepeat ? "Password mismatch" : ""}
                             type="password"
@@ -103,7 +106,7 @@ export default function () {
                                         aria-hidden="true"
                                     ></span>
                                 )}
-                                Sign Up
+                                {t("signUp")}
                             </button>
                         </div>
                     </div>
@@ -112,6 +115,7 @@ export default function () {
             {signUpSuccess && (
                 <div className="alert alert-success mt-3">Please check your e-mail to activate your account</div>
             )}
+            <LanguageSelector />
         </div>
     );
 }
