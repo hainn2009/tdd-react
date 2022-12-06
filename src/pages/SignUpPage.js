@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import Input from "../components/InputComponent";
 import LanguageSelector from "../components/LanguageSelector";
 
-export default function () {
+const SignUpPage = () => {
     const [username, setUsername] = useState();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
@@ -118,4 +118,6 @@ export default function () {
             <LanguageSelector />
         </div>
     );
-}
+};
+
+export default SignUpPage;
