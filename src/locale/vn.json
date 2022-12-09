@@ -3,5 +3,6 @@
     "username": "Tên người dùng",
     "email": "Thư điện tử",
     "password": "Mật khẩu",
-    "passwordRepeat": "Xác nhận mật khẩu"
+    "passwordRepeat": "Xác nhận mật khẩu",
+    "passwordMismatchValidation": "Mật khẩu và mật khẩu xác nhận chưa trùng khớp"
 }

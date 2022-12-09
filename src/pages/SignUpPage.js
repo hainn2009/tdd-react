@@ -19,7 +19,7 @@ const SignUpPage = () => {
             e.preventDefault();
             setApiProgress(true);
             await axios.post("/API/1.0/users", { username, email, password });
-            // setSignUpSuccess(true);
+            setSignUpSuccess(true);
             // fetch("API/1.0/users", {
             //     method: "POST",
             //     headers: {
@@ -78,7 +78,7 @@ const SignUpPage = () => {
                             id="passwordRepeat"
                             label={t("passwordRepeat")}
                             onChange={(e) => setPasswordRepeat(e.target.value)}
-                            help={password !== passwordRepeat ? "Password mismatch" : ""}
+                            help={password !== passwordRepeat ? t("passwordMismatchValidation") : ""}
                             type="password"
                         />
                         {/* <div className="mb-3">

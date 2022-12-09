@@ -206,6 +206,8 @@ describe("Signup Page", () => {
         });
     });
     describe("Internationalization", () => {
+        let englishToggle, vietnameseToggle;
+
         beforeEach(() => {
             i18n.changeLanguage("en");
             render(
@@ -214,6 +216,8 @@ describe("Signup Page", () => {
                     <LanguageSelector />
                 </>
             );
+            englishToggle = screen.getByTitle("English");
+            vietnameseToggle = screen.getByTitle("Tiếng Việt");
         });
         it("Initially display all texts in English", () => {
             expect(screen.getByRole("heading", { name: en.signUp })).toBeInTheDocument();
@@ -224,7 +228,6 @@ describe("Signup Page", () => {
             expect(screen.getByLabelText(en.passwordRepeat)).toBeInTheDocument();
         });
         it("Display all texts in Vietnamese after changing the language", () => {
-            const vietnameseToggle = screen.getByTitle("Tiếng Việt");
             userEvent.click(vietnameseToggle);
 
             expect(screen.getByRole("heading", { name: vn.signUp })).toBeInTheDocument();
@@ -235,9 +238,7 @@ describe("Signup Page", () => {
             expect(screen.getByLabelText(vn.passwordRepeat)).toBeInTheDocument();
         });
         it("Display all texts in English after changing back from Vietnamese", () => {
-            const vietnameseToggle = screen.getByTitle("Tiếng Việt");
             userEvent.click(vietnameseToggle);
-            const englishToggle = screen.getByTitle("English");
             userEvent.click(englishToggle);
 
             expect(screen.getByRole("heading", { name: en.signUp })).toBeInTheDocument();
@@ -246,6 +247,12 @@ describe("Signup Page", () => {
             expect(screen.getByLabelText(en.email)).toBeInTheDocument();
             expect(screen.getByLabelText(en.password)).toBeInTheDocument();
             expect(screen.getByLabelText(en.passwordRepeat)).toBeInTheDocument();
+        });
+        it("Display password mismatch validation in Vietnamese", () => {
+            userEvent.click(vietnameseToggle);
+            const passwordInput = screen.getByLabelText(vn.password);
+            userEvent.type(passwordInput, "1");
+            expect(screen.queryByText(vn.passwordMismatchValidation)).toBeInTheDocument();
         });
     });
 });
