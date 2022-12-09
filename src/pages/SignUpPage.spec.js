@@ -1,10 +1,11 @@
 import SignUpPage from "./SignUpPage";
+import LanguageSelector from "../components/LanguageSelector";
 import { render, screen, waitFor, waitForElementToBeRemoved } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import axios from "axios";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
-import "../locale/i18n";
+import i18n from "../locale/i18n";
 import en from "../locale/en.json";
 import vn from "../locale/vn.json";
 
@@ -205,8 +206,16 @@ describe("Signup Page", () => {
         });
     });
     describe("Internationalization", () => {
+        beforeEach(() => {
+            i18n.changeLanguage("en");
+            render(
+                <>
+                    <SignUpPage />
+                    <LanguageSelector />
+                </>
+            );
+        });
         it("Initially display all texts in English", () => {
-            render(<SignUpPage />);
             expect(screen.getByRole("heading", { name: en.signUp })).toBeInTheDocument();
             expect(screen.getByRole("button", { name: en.signUp })).toBeInTheDocument();
             expect(screen.getByLabelText(en.username)).toBeInTheDocument();
@@ -215,8 +224,6 @@ describe("Signup Page", () => {
             expect(screen.getByLabelText(en.passwordRepeat)).toBeInTheDocument();
         });
         it("Display all texts in Vietnamese after changing the language", () => {
-            render(<SignUpPage />);
-
             const vietnameseToggle = screen.getByTitle("Tiếng Việt");
             userEvent.click(vietnameseToggle);
 
@@ -228,8 +235,6 @@ describe("Signup Page", () => {
             expect(screen.getByLabelText(vn.passwordRepeat)).toBeInTheDocument();
         });
         it("Display all texts in English after changing back from Vietnamese", () => {
-            render(<SignUpPage />);
-
             const vietnameseToggle = screen.getByTitle("Tiếng Việt");
             userEvent.click(vietnameseToggle);
             const englishToggle = screen.getByTitle("English");

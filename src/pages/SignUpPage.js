@@ -3,7 +3,6 @@ import axios from "axios";
 import { handleRequest } from "msw";
 import { useTranslation } from "react-i18next";
 import Input from "../components/InputComponent";
-import LanguageSelector from "../components/LanguageSelector";
 
 const SignUpPage = () => {
     const [username, setUsername] = useState();
@@ -20,7 +19,7 @@ const SignUpPage = () => {
             e.preventDefault();
             setApiProgress(true);
             await axios.post("/API/1.0/users", { username, email, password });
-            setSignUpSuccess(true);
+            // setSignUpSuccess(true);
             // fetch("API/1.0/users", {
             //     method: "POST",
             //     headers: {
@@ -115,7 +114,6 @@ const SignUpPage = () => {
             {signUpSuccess && (
                 <div className="alert alert-success mt-3">Please check your e-mail to activate your account</div>
             )}
-            <LanguageSelector />
         </div>
     );
 };
