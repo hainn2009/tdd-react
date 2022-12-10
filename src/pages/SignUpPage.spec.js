@@ -10,10 +10,52 @@ import en from "../locale/en.json";
 import vn from "../locale/vn.json";
 
 describe("Signup Page", () => {
+    let requestBody;
+    let counter = 0;
+    let acceptLanguageHeader;
+    const server = setupServer(
+        rest.post("/api/1.0/users", async (req, res, ctx) => {
+            requestBody = await req.json();
+            counter += 1;
+            acceptLanguageHeader = req.headers.get("Accept-Language");
+            return res(ctx.status(200));
+        })
+    );
+    let passwordInput;
+    let passwordRepeatInput;
+    let signUpButton;
+    let usernameInput;
+    let emailInput;
+    beforeAll(() => {
+        server.listen();
+    });
+    beforeEach(() => {
+        i18n.changeLanguage("en");
+        requestBody = null;
+        counter = 0;
+        render(
+            <>
+                <SignUpPage />
+                <LanguageSelector />
+            </>
+        );
+        usernameInput = screen.getByLabelText("Username");
+        emailInput = screen.getByLabelText("Email");
+        passwordInput = screen.getByLabelText("Password");
+        passwordRepeatInput = screen.getByLabelText("Password Repeat");
+
+        signUpButton = screen.queryByRole("button", { name: "Sign Up" });
+    });
+    afterEach(() => {
+        // quan trong vi no se thiet lap lai rest.post cho chung ta
+        // nhung truong hop nao can override handler thi viet truc tiep tai tung case
+        server.resetHandlers();
+    });
+    afterAll(() => server.close());
     describe("Layout", () => {
-        beforeEach(() => {
-            render(<SignUpPage />);
-        });
+        // beforeEach(() => {
+        //     render(<SignUpPage />);
+        // });
         it("has header", () => {
             const header = screen.queryByRole("heading", { name: "Sign Up" });
             expect(header).toBeInTheDocument();
@@ -49,46 +91,17 @@ describe("Signup Page", () => {
             expect(button).toBeInTheDocument();
         });
         it("disables the Sign Up button initially", () => {
-            const button = screen.queryByRole("button", { name: "Sign Up" });
-            expect(button).toBeDisabled();
+            // const button = screen.queryByRole("button", { name: "Sign Up" });
+            expect(signUpButton).toBeDisabled();
         });
     });
     describe("Interactions", () => {
-        let requestBody;
-        let counter = 0;
-        const server = setupServer(
-            rest.post("/api/1.0/users", async (req, res, ctx) => {
-                requestBody = await req.json();
-                counter += 1;
-                return res(ctx.status(200));
-            })
-        );
-        let passwordInput;
-        let passwordRepeatInput;
-        let signUpButton;
-        let usernameInput;
-        let emailInput;
-        beforeAll(() => server.listen());
         beforeEach(() => {
-            requestBody = null;
-            counter = 0;
-            render(<SignUpPage />);
-            usernameInput = screen.getByLabelText("Username");
-            emailInput = screen.getByLabelText("Email");
-            passwordInput = screen.getByLabelText("Password");
-            passwordRepeatInput = screen.getByLabelText("Password Repeat");
             userEvent.type(usernameInput, "user1");
             userEvent.type(emailInput, "user1@mail.com");
             userEvent.type(passwordInput, "Password");
             userEvent.type(passwordRepeatInput, "Password");
-            signUpButton = screen.queryByRole("button", { name: "Sign Up" });
         });
-        afterEach(() => {
-            // quan trong vi no se thiet lap lai rest.post cho chung ta
-            // nhung truong hop nao can override handler thi viet truc tiep tai tung case
-            server.resetHandlers();
-        });
-        afterAll(() => server.close());
         it("enables the Sign Up button when password and password repeat are the same", () => {
             // const passwordInput = screen.getByLabelText("Password");
             // const passwordRepeatInput = screen.getByLabelText("Password Repeat");
@@ -209,15 +222,19 @@ describe("Signup Page", () => {
         let englishToggle, vietnameseToggle;
 
         beforeEach(() => {
-            i18n.changeLanguage("en");
-            render(
-                <>
-                    <SignUpPage />
-                    <LanguageSelector />
-                </>
-            );
+            // i18n.changeLanguage("en");
+            // render(
+            //     <>
+            //         <SignUpPage />
+            //         <LanguageSelector />
+            //     </>
+            // );
             englishToggle = screen.getByTitle("English");
             vietnameseToggle = screen.getByTitle("Tiếng Việt");
+            userEvent.type(usernameInput, "user1");
+            userEvent.type(emailInput, "user1@mail.com");
+            userEvent.type(passwordInput, "Password");
+            userEvent.type(passwordRepeatInput, "Password");
         });
         it("Initially display all texts in English", () => {
             expect(screen.getByRole("heading", { name: en.signUp })).toBeInTheDocument();
@@ -250,9 +267,26 @@ describe("Signup Page", () => {
         });
         it("Display password mismatch validation in Vietnamese", () => {
             userEvent.click(vietnameseToggle);
-            const passwordInput = screen.getByLabelText(vn.password);
+            const passwordInput = screen.getByLabelText(vn.password); // need to remove
             userEvent.type(passwordInput, "1");
             expect(screen.queryByText(vn.passwordMismatchValidation)).toBeInTheDocument();
+        });
+        it("send accept language header as en for outgoing request", async () => {
+            userEvent.type(passwordInput, "P4ssword");
+            userEvent.type(passwordRepeatInput, "P4ssword");
+            const form = screen.queryByTestId("form-sign-up");
+            userEvent.click(signUpButton);
+            await waitForElementToBeRemoved(form);
+            expect(acceptLanguageHeader).toBe("en");
+        });
+        it("send accept language header as vn for outgoing request after selecting that language", async () => {
+            userEvent.type(passwordInput, "P4ssword");
+            userEvent.type(passwordRepeatInput, "P4ssword");
+            userEvent.click(vietnameseToggle);
+            const form = screen.queryByTestId("form-sign-up");
+            userEvent.click(signUpButton);
+            await waitForElementToBeRemoved(form);
+            expect(acceptLanguageHeader).toBe("vn");
         });
     });
 });

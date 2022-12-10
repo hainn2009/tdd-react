@@ -12,13 +12,21 @@ const SignUpPage = () => {
     const [apiProgress, setApiProgress] = useState(false);
     const [signUpSuccess, setSignUpSuccess] = useState(false);
     const [errors, setErrors] = useState();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const handleSubmit = async (e) => {
         try {
             e.preventDefault();
             setApiProgress(true);
-            await axios.post("/API/1.0/users", { username, email, password });
+            await axios.post(
+                "/API/1.0/users",
+                { username, email, password },
+                {
+                    headers: {
+                        "Accept-Language": i18n.language,
+                    },
+                }
+            );
             setSignUpSuccess(true);
             // fetch("API/1.0/users", {
             //     method: "POST",
