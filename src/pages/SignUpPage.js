@@ -27,7 +27,7 @@ const SignUpPage = () => {
                     },
                 }
             );
-            setSignUpSuccess(true);
+            // setSignUpSuccess(true);
             // fetch("API/1.0/users", {
             //     method: "POST",
             //     headers: {
