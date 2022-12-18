@@ -8,9 +8,9 @@ import reportWebVitals from "./reportWebVitals";
 import * as apiCalls from "./api/apiCall";
 import "./locale/i18n";
 
-const actions = {
-    postSignup: apiCalls.Signup,
-};
+// const actions = {
+//     postSignup: apiCalls.Signup,
+// };
 
 ReactDOM.render(
     <React.StrictMode>

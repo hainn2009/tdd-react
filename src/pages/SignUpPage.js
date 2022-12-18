@@ -1,8 +1,8 @@
 import { useState } from "react";
-import axios from "axios";
 import { handleRequest } from "msw";
 import { useTranslation } from "react-i18next";
 import Input from "../components/InputComponent";
+import { signUp } from "../api/apiCall";
 
 const SignUpPage = () => {
     const [username, setUsername] = useState();
@@ -12,22 +12,18 @@ const SignUpPage = () => {
     const [apiProgress, setApiProgress] = useState(false);
     const [signUpSuccess, setSignUpSuccess] = useState(false);
     const [errors, setErrors] = useState();
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
 
     const handleSubmit = async (e) => {
         try {
             e.preventDefault();
             setApiProgress(true);
-            await axios.post(
-                "/API/1.0/users",
-                { username, email, password },
-                {
-                    headers: {
-                        "Accept-Language": i18n.language,
-                    },
-                }
-            );
-            // setSignUpSuccess(true);
+            await signUp({
+                username,
+                email,
+                password,
+            });
+            setSignUpSuccess(true);
             // fetch("API/1.0/users", {
             //     method: "POST",
             //     headers: {
@@ -47,7 +43,7 @@ const SignUpPage = () => {
         }
     };
     return (
-        <div className="col-lg-6 offset-lg-3 col-md-8 offset-md-2">
+        <div className="col-lg-6 offset-lg-3 col-md-8 offset-md-2" data-testid="signup-page">
             {!signUpSuccess && (
                 <form className="card mt-5" data-testid="form-sign-up">
                     <div className="card-header">
