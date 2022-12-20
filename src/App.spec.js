@@ -4,7 +4,7 @@ import App from "./App";
 describe("routing", () => {
     const setup = (path) => {
         window.history.pushState({}, "", path);
-        render(<App />);
+        // render(<App />);
     };
     it.each`
         path         | pageTestId
