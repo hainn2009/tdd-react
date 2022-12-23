@@ -1,10 +1,11 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import App from "./App";
 
 describe("routing", () => {
     const setup = (path) => {
         window.history.pushState({}, "", path);
-        // render(<App />);
+        render(<App />);
     };
     it.each`
         path         | pageTestId
@@ -36,5 +37,26 @@ describe("routing", () => {
         setup(path);
         const page = screen.queryByTestId(pageTestId);
         expect(page).not.toBeInTheDocument();
+    });
+    it.each`
+        pageName
+        ${"Home"}
+        ${"Signup"}
+        ${"Login"}
+    `("display link to the $pageName page in the navbar", ({ pageName }) => {
+        setup("/");
+        const link = screen.queryByRole("link", { name: pageName });
+        expect(link).toBeInTheDocument();
+    });
+    it.each`
+        initialPath  | clickedPath | pageTestId
+        ${"/"}       | ${"Signup"} | ${"signup-page"}
+        ${"/signup"} | ${"Home"}   | ${"home-page"}
+        ${"/signup"} | ${"Login"}  | ${"login-page"}
+    `("display $pageTestId after clicking $clickedPath link", ({ initialPath, clickedPath, pageTestId }) => {
+        setup(initialPath);
+        const link = screen.getByRole("link", { name: clickedPath });
+        userEvent.click(link);
+        expect(screen.getByTestId(pageTestId)).toBeInTheDocument();
     });
 });
