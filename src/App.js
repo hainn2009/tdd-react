@@ -13,7 +13,7 @@ function App() {
         event.preventDefault();
         const path = event.target.attributes.href.value;
         window.history.pushState({}, "", path);
-        setPath(path);
+        // setPath(path);
     };
     return (
         <div className="container">
