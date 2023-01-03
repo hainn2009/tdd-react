@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { handleRequest } from "msw";
 import { useTranslation } from "react-i18next";
 import Input from "../components/InputComponent";
 import { signUp } from "../api/apiCall";

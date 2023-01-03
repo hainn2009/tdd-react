@@ -6,18 +6,19 @@ import LanguageSelector from "./components/LanguageSelector";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import logo from "./assets/logo.jpg";
+import { BrowserRouter, Route } from "react-router-dom";
 
 function App() {
     const { t } = useTranslation();
     const [path, setPath] = useState(window.location.pathname);
     const handleNavLinkClick = (event) => {
         event.preventDefault();
-        const path = event.target.attributes.href.value;
+        const path = event.currentTarget.attributes.href.value;
         window.history.pushState({}, "", path);
         setPath(path);
     };
     return (
-        <>
+        <BrowserRouter>
             <nav className="navbar navbar-expand navbar-light bg-light shadow-sm">
                 <div className="container">
                     <a className="navbar-brand" href="/" title="Home" onClick={handleNavLinkClick}>
@@ -41,7 +42,7 @@ function App() {
                 {path.startsWith("/user/") && <UserPage />}
                 <LanguageSelector />
             </div>
-        </>
+        </BrowserRouter>
     );
 }
 
