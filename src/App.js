@@ -6,7 +6,23 @@ import LanguageSelector from "./components/LanguageSelector";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import logo from "./assets/logo.jpg";
-import { BrowserRouter, Route, Link, createBrowserRouter, Outlet } from "react-router-dom";
+import { BrowserRouter, Route, Link, createBrowserRouter, createRoutesFromElements, Outlet } from "react-router-dom";
+
+export const router = createBrowserRouter(
+    createRoutesFromElements(
+        <Route path="/" element={<App />}>
+            <Route index element={<HomePage />} />
+            <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/user/:id" element={<UserPage />} />
+        </Route>
+
+    )
+    //     [{
+    //     path: "/",
+    //     element: <App />
+    // }]
+)
 
 function App() {
     const { t } = useTranslation();
@@ -38,10 +54,10 @@ function App() {
                         <a className="nav-link" href="/login" title="Login" onClick={handleNavLinkClick}>
                             Login
                         </a> */}
-                        <Link className="nav-link" href="/signup" title="Signup" onClick={handleNavLinkClick}>
+                        <Link className="nav-link" to="/signup" title="Signup">
                             {t("signUp")}
                         </Link>
-                        <Link className="nav-link" href="/login" title="Login" onClick={handleNavLinkClick}>
+                        <Link className="nav-link" to="/login" title="Login">
                             Login
                         </Link>
                     </div>
@@ -65,3 +81,4 @@ function App() {
 }
 
 export default App;
+
