@@ -7,16 +7,23 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import * as apiCalls from "./api/apiCall";
 import "./locale/i18n";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 // const actions = {
 //     postSignup: apiCalls.Signup,
 // };
 
+const router = createBrowserRouter([{
+    path: "/",
+    element: <App />
+}])
+
 ReactDOM.render(
     <React.StrictMode>
         {/* <UserSignupPage actions={actions} /> */}
         {/* <LoginPage /> */}
-        <App />
+        {/* <App /> */}
+        <RouterProvider router={router} />
     </React.StrictMode>,
     document.getElementById("root")
 );
