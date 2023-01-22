@@ -7,14 +7,17 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import logo from "./assets/logo.jpg";
 import { BrowserRouter, Route, Link, createBrowserRouter, createRoutesFromElements, Outlet } from "react-router-dom";
+import ErrorPage from "./pages/errorPage";
+import Contact from "./pages/contactPage";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
-        <Route path="/" element={<App />}>
+        <Route path="/" element={<App />} errorElement={<ErrorPage />}>
             <Route index element={<HomePage />} />
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/user/:id" element={<UserPage />} />
+            <Route path='contacts/:contactId' element={<Contact />} />
         </Route>
 
     )
