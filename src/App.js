@@ -8,16 +8,22 @@ import { useTranslation } from "react-i18next";
 import logo from "./assets/logo.jpg";
 import { BrowserRouter, Route, Link, createBrowserRouter, createRoutesFromElements, Outlet } from "react-router-dom";
 import ErrorPage from "./pages/errorPage";
-import Contact from "./pages/contactPage";
+import Contact, { loader as contactLoader } from "./pages/contactPage";
+import ContactHomePage, { loader as contactHomePageLoader, action as contactAction } from "./pages/contactHomePage";
+import EditContact, { action as editContactAction } from "./pages/editContactPage";
+import { action as deleteContactAction } from "./pages/deleteContact";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
         <Route path="/" element={<App />} errorElement={<ErrorPage />}>
-            <Route index element={<HomePage />} />
+            <Route path="contacts" element={<ContactHomePage />} loader={contactHomePageLoader} action={contactAction}>
+                <Route path=':contactId' element={<Contact />} loader={contactLoader} />
+                <Route path=":contactId/edit" element={<EditContact />} loader={contactLoader} action={editContactAction} />
+                <Route path=":contactId/delete" action={deleteContactAction} />
+            </Route>
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/user/:id" element={<UserPage />} />
-            <Route path='contacts/:contactId' element={<Contact />} />
         </Route>
 
     )
