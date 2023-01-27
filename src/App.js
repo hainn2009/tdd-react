@@ -6,7 +6,7 @@ import LanguageSelector from "./components/LanguageSelector";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import logo from "./assets/logo.jpg";
-import { BrowserRouter, Route, Link, createBrowserRouter, createRoutesFromElements, Outlet } from "react-router-dom";
+import { BrowserRouter, Route, Link, createBrowserRouter, createRoutesFromElements, Outlet, NavLink } from "react-router-dom";
 import ErrorPage from "./pages/errorPage";
 import Contact, { loader as contactLoader } from "./pages/contactPage";
 import ContactHomePage, { loader as contactHomePageLoader, action as contactAction } from "./pages/contactHomePage";
@@ -46,7 +46,7 @@ function App() {
         // <h1>Hello World</h1>
         // <BrowserRouter>
         <>
-            <nav className="navbar navbar-expand navbar-light bg-light shadow-sm">
+            <nav className="navbar navbar-expand bg-light shadow-sm nav-pills">
                 <div className="container">
                     {/* <a className="navbar-brand" href="/" title="Home" onClick={handleNavLinkClick}>
                         <img src={logo} alt="My TDD project" width="60" />
@@ -63,12 +63,13 @@ function App() {
                         <a className="nav-link" href="/login" title="Login" onClick={handleNavLinkClick}>
                             Login
                         </a> */}
-                        <Link className="nav-link" to="/signup" title="Signup">
+                        <NavLink className="nav-item nav-link" to="/signup" title="Signup">
                             {t("signUp")}
-                        </Link>
-                        <Link className="nav-link" to="/login" title="Login">
+                        </NavLink>
+                        <NavLink className="nav-item nav-link" to="/login" title="Login">
                             Login
-                        </Link>
+                        </NavLink>
+                        <NavLink className="nav-item nav-link" to="/contacts" title="Contact">Contact</NavLink>
                     </div>
                 </div>
             </nav>

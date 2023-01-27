@@ -1,4 +1,4 @@
-html {
+/* html {
     box-sizing: border-box;
 }
 
@@ -27,7 +27,7 @@ body {
     margin: 0;
     line-height: 1.5;
     color: #121212;
-}
+} */
 
 textarea,
 input,
@@ -58,6 +58,7 @@ button:active {
     box-shadow: 0 0px 1px hsla(0, 0%, 0%, 0.4);
     transform: translateY(1px);
 }
+
 
 #contact h1 {
     display: flex;
@@ -103,12 +104,13 @@ form[action$="destroy"] button {
     border-width: 0;
 }
 
+/*
 #root {
     display: flex;
     height: 100%;
     width: 100%;
 }
-
+*/
 #sidebar {
     width: 22rem;
     background-color: #f7f7f7;

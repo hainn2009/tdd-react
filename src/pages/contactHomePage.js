@@ -6,6 +6,7 @@ import {
     redirect, NavLink
 } from "react-router-dom";
 import { getContacts, createContact } from "../api/contact";
+import "./contactHomePage.css"
 
 export async function loader() {
     const contacts = await getContacts();
