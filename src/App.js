@@ -12,6 +12,7 @@ import Contact, { loader as contactLoader } from "./pages/contactPage";
 import ContactHomePage, { loader as contactHomePageLoader, action as contactAction } from "./pages/contactHomePage";
 import EditContact, { action as editContactAction } from "./pages/editContactPage";
 import { action as deleteContactAction } from "./pages/deleteContact";
+import AddTwoNumberPage, { loader as addTwoNumberLoader, action as calculateAction } from "./pages/AddTwoNumberPage";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -21,6 +22,7 @@ export const router = createBrowserRouter(
                 <Route path=":contactId/edit" element={<EditContact />} loader={contactLoader} action={editContactAction} />
                 <Route path=":contactId/delete" action={deleteContactAction} />
             </Route>
+            <Route path="addTwoNumber" element={<AddTwoNumberPage />} loader={addTwoNumberLoader} action={calculateAction} />
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/user/:id" element={<UserPage />} />
@@ -70,6 +72,7 @@ function App() {
                             Login
                         </NavLink>
                         <NavLink className="nav-item nav-link" to="/contacts" title="Contact">Contact</NavLink>
+                        <NavLink className="nav-item nav-link" to="/addTwoNumber" title="Contact">Add Number</NavLink>
                     </div>
                 </div>
             </nav>
