@@ -42,7 +42,7 @@ function App() {
         event.preventDefault();
         const path = event.currentTarget.attributes.href.value;
         window.history.pushState({}, "", path);
-        // setPath(path);
+        setPath(path);
     };
     return (
         // <h1>Hello World</h1>
