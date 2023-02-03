@@ -13,6 +13,7 @@ import ContactHomePage, { loader as contactHomePageLoader, action as contactActi
 import EditContact, { action as editContactAction } from "./pages/editContactPage";
 import { action as deleteContactAction } from "./pages/deleteContact";
 import AddTwoNumberPage, { loader as addTwoNumberLoader, action as calculateAction } from "./pages/AddTwoNumberPage";
+import TodoApp, {loader as todoAppLoader} from "./pages/TodoApp";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -26,6 +27,7 @@ export const router = createBrowserRouter(
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/user/:id" element={<UserPage />} />
+            <Route path="/todos" loader={todoAppLoader} element={<TodoApp />} />
         </Route>
 
     )
@@ -44,6 +46,7 @@ function App() {
         window.history.pushState({}, "", path);
         setPath(path);
     };
+    
     return (
         // <h1>Hello World</h1>
         // <BrowserRouter>
@@ -73,6 +76,7 @@ function App() {
                         </NavLink>
                         <NavLink className="nav-item nav-link" to="/contacts" title="Contact">Contact</NavLink>
                         <NavLink className="nav-item nav-link" to="/addTwoNumber" title="Contact">Add Number</NavLink>
+                        <NavLink className="nav-item nav-link" to="/todos" title="Contact">Todo App</NavLink>
                     </div>
                 </div>
             </nav>
