@@ -16,90 +16,90 @@ import AddTwoNumberPage, { loader as addTwoNumberLoader, action as calculateActi
 import TodoApp, { loader as todoAppLoader } from "./pages/TodoApp";
 
 export const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path="/" element={<App />} errorElement={<ErrorPage />}>
-      <Route path="contacts" element={<ContactHomePage />} loader={contactHomePageLoader} action={contactAction}>
-        <Route path=":contactId" element={<Contact />} loader={contactLoader} />
-        <Route path=":contactId/edit" element={<EditContact />} loader={contactLoader} action={editContactAction} />
-        <Route path=":contactId/delete" action={deleteContactAction} />
-      </Route>
-      <Route path="addTwoNumber" element={<AddTwoNumberPage />} loader={addTwoNumberLoader} action={calculateAction} />
-      <Route path="/signup" element={<SignUpPage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/user/:id" element={<UserPage />} />
-      <Route path="/todos" loader={todoAppLoader} element={<TodoApp />} />
-    </Route>
-  )
-  //     [{
-  //     path: "/",
-  //     element: <App />
-  // }]
+    createRoutesFromElements(
+        <Route path="/" element={<App />} errorElement={<ErrorPage />}>
+            <Route path="contacts" element={<ContactHomePage />} loader={contactHomePageLoader} action={contactAction}>
+                <Route path=":contactId" element={<Contact />} loader={contactLoader} />
+                <Route path=":contactId/edit" element={<EditContact />} loader={contactLoader} action={editContactAction} />
+                <Route path=":contactId/delete" action={deleteContactAction} />
+            </Route>
+            <Route path="addTwoNumber" element={<AddTwoNumberPage />} loader={addTwoNumberLoader} action={calculateAction} />
+            <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/user/:id" element={<UserPage />} />
+            <Route path="/todos" loader={todoAppLoader} element={<TodoApp />} />
+        </Route>
+    )
+    //     [{
+    //     path: "/",
+    //     element: <App />
+    // }]
 );
 
 function App() {
-  const { t } = useTranslation();
-  const [path, setPath] = useState(window.location.pathname);
-  const handleNavLinkClick = (event) => {
-    event.preventDefault();
-    const path = event.currentTarget.attributes.href.value;
-    window.history.pushState({}, "", path);
-    setPath(path);
-  };
+    const { t } = useTranslation();
+    const [path, setPath] = useState(window.location.pathname);
+    const handleNavLinkClick = (event) => {
+        event.preventDefault();
+        const path = event.currentTarget.attributes.href.value;
+        window.history.pushState({}, "", path);
+        // setPath(path);
+    };
 
-  return (
-    // <h1>Hello World</h1>
-    // <BrowserRouter>
-    <>
-      <nav className="navbar navbar-expand bg-light shadow-sm nav-pills">
-        <div className="container">
-          {/* <a className="navbar-brand" href="/" title="Home" onClick={handleNavLinkClick}>
+    return (
+        // <h1>Hello World</h1>
+        // <BrowserRouter>
+        <>
+            <nav className="navbar navbar-expand bg-light shadow-sm nav-pills">
+                <div className="container">
+                    {/* <a className="navbar-brand" href="/" title="Home" onClick={handleNavLinkClick}>
                         <img src={logo} alt="My TDD project" width="60" />
                         My TDD project
                     </a> */}
-          <Link className="navbar-brand" to="/" title="Home">
-            <img src={logo} alt="My TDD project" width="60" />
-            My TDD project
-          </Link>
-          <div className="navbar-nav">
-            {/* <a className="nav-link" href="/signup" title="Signup" onClick={handleNavLinkClick}>
+                    <Link className="navbar-brand" to="/" title="Home">
+                        <img src={logo} alt="My TDD project" width="60" />
+                        My TDD project
+                    </Link>
+                    <div className="navbar-nav">
+                        {/* <a className="nav-link" href="/signup" title="Signup" onClick={handleNavLinkClick}>
                             {t("signUp")}
                         </a>
                         <a className="nav-link" href="/login" title="Login" onClick={handleNavLinkClick}>
                             Login
                         </a> */}
-            <NavLink className="nav-item nav-link" to="/signup" title="Signup">
-              {t("signUp")}
-            </NavLink>
-            <NavLink className="nav-item nav-link" to="/login" title="Login">
-              Login
-            </NavLink>
-            <NavLink className="nav-item nav-link" to="/contacts" title="Contact">
-              Contact
-            </NavLink>
-            <NavLink className="nav-item nav-link" to="/addTwoNumber" title="Contact">
-              Add Number
-            </NavLink>
-            <NavLink className="nav-item nav-link" to="/todos" title="Contact">
-              Todo App
-            </NavLink>
-          </div>
-        </div>
-      </nav>
-      <div className="container">
-        <Outlet />
-        {/* <Route exact path="/" component={HomePage} /> */}
-        {/* <Route path="/signup" component={SignUpPage} />
+                        <NavLink className="nav-item nav-link" to="/signup" title="Signup">
+                            {t("signUp")}
+                        </NavLink>
+                        <NavLink className="nav-item nav-link" to="/login" title="Login">
+                            Login
+                        </NavLink>
+                        <NavLink className="nav-item nav-link" to="/contacts" title="Contact">
+                            Contact
+                        </NavLink>
+                        <NavLink className="nav-item nav-link" to="/addTwoNumber" title="Contact">
+                            Add Number
+                        </NavLink>
+                        <NavLink className="nav-item nav-link" to="/todos" title="Contact">
+                            Todo App
+                        </NavLink>
+                    </div>
+                </div>
+            </nav>
+            <div className="container">
+                <Outlet />
+                {/* <Route exact path="/" component={HomePage} /> */}
+                {/* <Route path="/signup" component={SignUpPage} />
                 <Route path="/login" component={LoginPage} />
                 <Route path="/user/:id" component={UserPage} /> */}
-        {/* {path === "/" && <HomePage />}
+                {/* {path === "/" && <HomePage />}
                 {path === "/signup" && <SignUpPage />}
                 {path === "/login" && <LoginPage />}
                 {path.startsWith("/user/") && <UserPage />} */}
-        <LanguageSelector />
-      </div>
-    </>
-    // </BrowserRouter>
-  );
+                <LanguageSelector />
+            </div>
+        </>
+        // </BrowserRouter>
+    );
 }
 
 export default App;
