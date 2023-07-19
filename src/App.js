@@ -14,6 +14,8 @@ import EditContact, { action as editContactAction } from "./pages/editContactPag
 import { action as deleteContactAction } from "./pages/deleteContact";
 import AddTwoNumberPage, { loader as addTwoNumberLoader, action as calculateAction } from "./pages/AddTwoNumberPage";
 import TodoApp, { loader as todoAppLoader } from "./pages/TodoApp";
+import WeatherApp from "./pages/WeatherApp";
+import API from "./pages/api";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -28,6 +30,8 @@ export const router = createBrowserRouter(
             <Route path="/login" element={<LoginPage />} />
             <Route path="/user/:id" element={<UserPage />} />
             <Route path="/todos" loader={todoAppLoader} element={<TodoApp />} />
+            <Route path="/weather" element={<WeatherApp />} />
+            <Route path="/api" element={<API />} />
         </Route>
     )
     //     [{
@@ -81,6 +85,9 @@ function App() {
                         </NavLink>
                         <NavLink className="nav-item nav-link" to="/todos" title="Contact">
                             Todo App
+                        </NavLink>
+                        <NavLink className="nav-item nav-link" to="/weather" title="Weather App">
+                            Weather App
                         </NavLink>
                     </div>
                 </div>

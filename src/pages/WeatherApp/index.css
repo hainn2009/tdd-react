@@ -1,0 +1,424 @@
+* {
+    margin: 0;
+    padding: 0px;
+  }
+input, button {
+    color: #fff;
+}
+  
+  .f,
+  a {
+    color: #fff;
+    font-family: 'Manrope', sans-serif;
+  }
+  
+  .f-g {
+    color: rgb(201, 201, 201);
+    font-family: 'Manrope', sans-serif;
+  }
+  
+  .g {
+    color: rgb(155, 155, 155);
+    font-family: 'Manrope', sans-serif;
+  }
+  
+  .lgst {
+    font-weight: 200;
+    font-size: 150px;
+  }
+  
+  .lg {
+    font-weight: 200;
+    font-size: 70px;
+  }
+  
+  .med {
+    font-weight: 200;
+    font-size: 40px;
+  }
+  
+  .sm {
+    font-weight: 200;
+    font-size: 30px;
+  }
+  
+  .smr {
+    font-weight: 200;
+    font-size: 25px;
+  }
+  
+  .smst {
+    font-weight: 200;
+    font-size: 20px;
+  }
+  
+  .box {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .stack {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .forecast {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+  }
+  
+  .c {
+    text-align: center;
+  }
+  
+  .weather-desc {
+    padding-bottom: 50px;
+  }
+  
+  .pillars {
+    display: flex;
+    overflow: hidden;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+  
+  .weather-pillars {
+    justify-content: space-between;
+  }
+  
+  .weath-sec {
+    width: 200px;
+  }
+  
+  #weath-sec {
+    visibility: hidden;
+  }
+  
+  #indicator {
+    color: #fff;
+    margin-top: 10%;
+    text-align: center;
+  }
+  
+  img.weather-icon-sm {
+    height: 100px;
+  }
+  
+  .we-svg {
+    height: 70px;
+  }
+  
+  /*https://codepen.io/sosuke/pen/Pjoqqp*/
+  
+  .filter-blue {
+    filter: invert(61%) sepia(97%) saturate(268%) hue-rotate(156deg)
+      brightness(103%) contrast(101%);
+  }
+  
+  /* .top-center {
+      padding-top:5%; 
+  } */
+  
+  img#nodelogo {
+    width: 100%;
+    height: auto;
+    max-width: 960px;
+  }
+  
+  img#profile {
+    border-radius: 50%;
+    width: 15%;
+    height: 15%;
+    min-width: 180px;
+    max-width: 280px;
+    border: 6px solid rgb(71, 203, 255);
+  }
+  
+  .prof-img {
+    padding-top: 40px;
+    padding-bottom: 20px;
+  }
+  
+  .social {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .soc-icon-mid {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  
+  .soc-svg {
+    height: 50px;
+  }
+  
+  .soc-svg-ln {
+    height: 65px;
+  }
+  
+  button {
+    background-color: transparent;
+  }
+  
+  .contact-button {
+    border-radius: 5px;
+    border: 1px solid rgb(201, 201, 201);
+    padding: 10px 25px 10px 25px;
+    max-width: 300px;
+  }
+  
+  .contact-button:hover {
+    color: #fff;
+    border: 1px solid #fff;
+    box-shadow: 0 0px 15px rgba(71, 203, 255, 0.5);
+    cursor: pointer;
+  }
+  
+  button.disabled,
+  button.disabled:hover {
+    color: rgb(201, 201, 201);
+    border: 1px solid rgb(201, 201, 201);
+    box-shadow: 0 0px 15px rgba(71, 203, 255, 0);
+    cursor: pointer;
+  }
+  
+  a {
+    text-decoration: none;
+  }
+  
+  a:hover {
+    /* text-decoration: underline; */
+    box-shadow: inset 0 0px 0 white, inset 0 -1px 0 #fff;
+  }
+  
+  a.button {
+    text-decoration: none;
+  }
+  
+  footer {
+    text-align: center;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.55);
+    padding-top: 30px;
+    padding-bottom: 30px;
+  }
+  
+  footer > a {
+    text-decoration: none;
+    padding: 40px;
+  }
+  
+  footer > a:hover {
+    border-top: 2px solid #037fa8;
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  
+  .search {
+    position: relative;
+  }
+  
+  .search input {
+    text-indent: 30px;
+  }
+  
+  .search .fa-search-location {
+    position: absolute;
+    top: 20px;
+    left: 7px;
+  }
+  
+  .contact {
+    position: relative;
+    margin-top: 10px;
+  }
+  
+  .contact i {
+    position: absolute;
+    top: 45px;
+    left: 7px;
+  }
+  
+  #feedback {
+    opacity: 0;
+  }
+  
+  .form-container {
+    width: 430px;
+    margin: 0 auto;
+    overflow: none;
+    margin-bottom: 100px;
+  }
+  
+  input {
+    text-indent: 30px;
+  }
+  
+  input,
+  textarea {
+    outline: none;
+    padding: 0px 0px 3px 3px;
+    margin: 5px 1px 3px 0px;
+    font-size: 1.5em;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #fff;
+    width: 400px;
+    font-weight: 200;
+  }
+  
+  textarea {
+    height: 200px;
+    resize: none;
+    overflow: hidden;
+  }
+  
+  input:focus,
+  textarea:focus {
+    border: none;
+    border-bottom: 1px solid rgb(71, 203, 255);
+  }
+  
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    transition: background-color 5500s ease-in-out 0s;
+    -webkit-text-fill-color: white !important;
+  }
+  
+  .pl-20 {
+    padding-left: 20px;
+  }
+  
+  .mt-50 {
+    margin-top: 50px;
+  }
+  
+  .mt-20 {
+    margin-top: 20px;
+  }
+  
+  .mt-15 {
+    margin-top: 15px;
+  }
+  
+  .mt-10 {
+    margin-top: 10px;
+  }
+  
+  .mt-5 {
+    margin-top: 5px;
+  }
+  
+  .err {
+    color: rgb(233, 233, 233);
+    cursor: pointer;
+    margin-left: 5px;
+  }
+  
+  .red {
+    color: red;
+  }
+  
+  .green {
+    color: green;
+  }
+  
+  .tooltip-big-text {
+    --balloon-font-size: 20px;
+  }
+  
+  @media screen and (max-width: 800px) {
+    footer > a {
+      text-decoration: none;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    footer > a:hover {
+      border-top: 2px solid #037fa8;
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+    .lgst {
+      font-weight: 200;
+      font-size: 40px;
+    }
+    .lg {
+      font-weight: 200;
+      font-size: 40px;
+    }
+    .med {
+      font-weight: 200;
+      font-size: 30px;
+    }
+    #forecastSummary {
+      margin-bottom: 100px;
+    }
+    #weath-sec,
+    .weath-sec {
+      text-align: center;
+    }
+    .soc-icon-mid {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+    .mob-clear {
+      margin-bottom: 200px;
+    }
+  
+    #indicator {
+      margin-top: 25%;
+    }
+  }
+  
+  @media screen and (max-width: 600px) {
+    .weath-sec {
+      width: 350px;
+      /*force wrap*/
+      padding-bottom: 20px;
+    }
+    .we-svg {
+      height: 50px !important;
+    }
+    input,
+    textarea {
+      width: 320px;
+      font-weight: 200;
+      font-size: 1em !important;
+      height: 40px;
+    }
+    textarea#message {
+      height: 150px;
+    }
+  
+    .form-container {
+      width: 370px;
+      margin: 0px;
+  
+      margin-bottom: 100px;
+    }
+  }
+  
+  body::-webkit-scrollbar {
+    width: 0.25rem;
+  }
+  
+  body::-webkit-scrollbar-track {
+    background: rgb(1, 4, 17);
+    width: 0.25rem;
+  }
+  
+  body::-webkit-scrollbar-thumb {
+    background: rgb(71, 203, 255);
+    width: 0.25rem;
+  }
+  
