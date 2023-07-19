@@ -89,6 +89,9 @@ function App() {
                         <NavLink className="nav-item nav-link" to="/weather" title="Weather App">
                             Weather App
                         </NavLink>
+                        <NavLink className="nav-item nav-link" to="/api" title="API">
+                            API
+                        </NavLink>
                     </div>
                 </div>
             </nav>
