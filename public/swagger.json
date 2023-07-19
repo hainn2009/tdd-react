@@ -1,0 +1,1693 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "TES Developer Portal",
+    "description": "TES Developer Portal - Public Request  API",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "basePath": "/cpadmin/request-raise/",
+  "schemes": ["https", "http"],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/packingTypes": {
+      "get": {
+        "tags": [
+          "Packing Types"
+        ],
+        "summary": "Get all Packing types",
+        "description": "<b>Implementation Notes</b> <div>Fetches lists of packing types configured for the portal</div>",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-userid",
+            "in": "header",
+            "required": true,
+            "description": "user id for access api",
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "pass authorization token should start with Bearer .....",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Packing types",
+            "schema": {
+              "$ref": "#/definitions/packingType"
+            }
+          }
+        }
+      }
+    },
+    "/packageDimensions": {
+      "get": {
+        "tags": [
+          "Packing Types"
+        ],
+        "summary": "Get all Package dimensions",
+        "description": "<b>Implementation Notes</b> <div>Fetches lists of package dimensions configured for the portal</div>",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-userid",
+            "in": "header",
+            "required": true,
+            "description": "user id for access api",
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "pass authorization token should start with Bearer .....",
+            "type": "string"
+          },
+          {
+            "name": "packagingId",
+            "in": "query",
+            "description": "packing type id",
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Package dimensions",
+            "schema": {
+              "$ref": "#/definitions/packageDimension"
+            }
+          }
+        }
+      }
+    },
+    "/additionalFields": {
+      "get": {
+        "tags": [
+          "AdditionalFields"
+        ],
+        "summary": "Get all Additional Fields list",
+        "description": "<b>Implementation Notes</b> <div>Fetches lists of Available Custom fields configured for the portal <br> Allowed API call only 5 times per 30 seconds </div>",
+        "Model": [
+          {
+            "name": "x-userid",
+            "in": "header",
+            "required": true,
+            "description": "user id for access api",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-userid",
+            "in": "header",
+            "required": true,
+            "description": "user id for access api",
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "pass authorization token should start with Bearer .....",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All System master array",
+            "schema": {
+              "$ref": "#/definitions/customField"
+            }
+          }
+        }
+      }
+    },
+    "/requestTypeDetails": {
+      "post": {
+        "tags": [
+          "Request Details"
+        ],
+        "summary": "Get all Request Details list",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-userid",
+            "in": "header",
+            "required": true,
+            "description": "user id for access api",
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "pass authorization token should start with Bearer .....",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All System master array",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/requestIds": {
+      "post": {
+        "tags": [
+          "Request Details"
+        ],
+        "summary": "Get all Request Ids through filter",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-userid",
+            "in": "header",
+            "required": true,
+            "description": "user id for access api",
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "pass authorization token should start with Bearer .....",
+            "type": "string"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "description": "Request that we want to create",
+            "schema": {
+              "$ref": "#/definitions/requestIdFilter"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All Request ids",
+            "schema": {
+              "$ref": "#/definitions/requestIdFilterResult"
+            }
+          }
+        }
+      }
+    },
+    "/listRequestStages": {
+      "post": {
+        "tags": [
+          "Request type configuration"
+        ],
+        "summary": "Get Request configuration details",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-userid",
+            "in": "header",
+            "required": true,
+            "description": "user id for access api",
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "pass authorization token should start with Bearer .....",
+            "type": "string"
+          },
+          {
+            "name": "requestTypeId",
+            "in": "body",
+            "description": "Status of the Request Stages",
+            "schema": {
+              "$ref": "#/definitions/RequestStagesStatus"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All System master array",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/getServices": {
+      "post": {
+        "tags": [
+          "Service Details"
+        ],
+        "summary": "Get Service Details",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-userid",
+            "in": "header",
+            "required": true,
+            "description": "user id for access api",
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "pass authorization token should start with Bearer .....",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All System master array",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/save": {
+      "post": {
+        "tags": [
+          "Request Raise"
+        ],
+        "summary": "Create New Collection Request",
+        "description": "Create new Request in system",
+        "parameters": [
+          {
+            "name": "x-userid",
+            "in": "header",
+            "required": true,
+            "description": "user id for access api",
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "pass authorization token should start with Bearer .....",
+            "type": "string"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "description": "Request that we want to create",
+            "schema": {
+              "$ref": "#/definitions/newRequest"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "New Request is created",
+            "schema": {
+              "$ref": "#/definitions/newRequestResult"
+            }
+          }
+        }
+      }
+    },
+    "/saveQuote": {
+      "post": {
+        "tags": [
+          "Quotation Request Raise"
+        ],
+        "summary": "Create New Quotation Request",
+        "description": "Create new Quotation Request in system",
+        "parameters": [
+          {
+            "name": "x-userid",
+            "in": "header",
+            "required": true,
+            "description": "user id for access api",
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "pass authorization token should start with Bearer .....",
+            "type": "string"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "description": "Request that we want to create",
+            "schema": {
+              "$ref": "#/definitions/newQuotationRequest"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "New Quotation Request is created",
+            "schema": {
+              "$ref": "#/definitions/newQuotationRequestResult"
+            }
+          }
+        }
+      }
+    },
+    "/requestQuoteDetail": {
+      "post": {
+        "tags": [
+          "Quotation Request Raise"
+        ],
+        "summary": "Get Quotation Request Details",
+        "description": "Get Quotation Request Details",
+        "parameters": [
+          {
+            "name": "x-userid",
+            "in": "header",
+            "required": true,
+            "description": "user id for access api",
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "pass authorization token should start with Bearer .....",
+            "type": "string"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "description": "Status of the Quotation Request",
+            "schema": {
+              "$ref": "#/definitions/QuotationRequestStatus"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "New Quotation Request Status",
+            "schema": {
+              "$ref": "#/definitions/QuotationRequestStatusResult"
+            }
+          }
+        }
+      }
+    },
+    "/requestQuoteUpdate": {
+      "post": {
+        "tags": [
+          "Quotation Request Raise"
+        ],
+        "summary": "Approve or Decline the Quotation and submit the request",
+        "description": "Create new Quotation Request in system",
+        "parameters": [
+          {
+            "name": "x-userid",
+            "in": "header",
+            "required": true,
+            "description": "user id for access api",
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "pass authorization token should start with Bearer .....",
+            "type": "string"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "description": "Request that we want to create",
+            "schema": {
+              "$ref": "#/definitions/QuotationRequestApproveOrReject"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "New Quotation Request is created",
+            "schema": {
+              "$ref": "#/definitions/QuotationRequestApproveOrRejectResult"
+            }
+          }
+        }
+      }
+    },
+    "/requestStatus/{displayId}": {
+      "get": {
+        "tags": [
+          "Request Status Details"
+        ],
+        "summary": "Get status of the collection request",
+        "description": "Get Request status  <br> Allowed API call only 5 times per 30 seconds",
+        "parameters": [
+          {
+            "name": "x-userid",
+            "in": "header",
+            "required": true,
+            "description": "user id for access api",
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "pass authorization token should start with Bearer .....",
+            "type": "string"
+          },
+          {
+            "name": "displayId",
+            "in": "path",
+            "description": "Get Request Status by requestId",
+            "schema": {
+              "$ref": "#/definitions/requestStatus"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Request status details",
+            "schema": {
+              "$ref": "#/definitions/requestStatusResult"
+            }
+          }
+        }
+      }
+    },
+    "/requestStatuses/{displayId}": {
+      "get": {
+        "tags": [
+          "Request Status Details"
+        ],
+        "summary": "Get status of the collection request",
+        "description": "Get passed Requests status  <br> Allowed API call only 5 times per 30 seconds",
+        "parameters": [
+          {
+            "name": "x-userid",
+            "in": "header",
+            "required": true,
+            "description": "user id for access api",
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "pass authorization token should start with Bearer .....",
+            "type": "string"
+          },
+          {
+            "name": "displayId",
+            "in": "path",
+            "required": true,
+            "description": "Get status of multiple request by adding comma separated request ids",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Request status details",
+            "schema": {
+              "$ref": "#/definitions/requestStatusResult"
+            }
+          }
+        }
+      }
+    },
+    "/requestDocumentType": {
+      "get": {
+        "tags": [
+          "Reports Details"
+        ],
+        "summary": "Get all Request Document Type list",
+        "description": "Get Request Document Type  <br> Allowed API call only 5 times per 30 seconds",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-userid",
+            "in": "header",
+            "required": true,
+            "description": "user id for access api",
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "pass authorization token should start with Bearer .....",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All System master array",
+            "schema": {
+              "$ref": "#/definitions/reportType"
+            }
+          }
+        }
+      }
+    },
+    "/requestTesDocument": {
+      "post": {
+        "tags": [
+          "Reports Details"
+        ],
+        "summary": "Get TES Report details",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-userid",
+            "in": "header",
+            "required": true,
+            "description": "user id for access api",
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "pass authorization token should start with Bearer .....",
+            "type": "string"
+          },
+          {
+            "name": "requestId",
+            "in": "body",
+            "description": "Status of the Request Stages@@@@@@@@@@@",
+            "schema": {
+              "$ref": "#/definitions/ReportRequire"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Report document file",
+            "schema": {}
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "required": [
+        "name",
+        "_id",
+        "companies"
+      ],
+      "properties": {
+        "_id": {
+          "type": "integer",
+          "uniqueItems": true
+        },
+        "isPublic": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        },
+        "books": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "amount": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "companies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Users": {
+      "type": "array",
+      "$ref": "#/definitions/User"
+    },
+    "newRequest": {
+      "required": [
+        "requestTypeId",
+        "siteId",
+        "primaryContact",
+        "email",
+        "mobile"
+      ],
+      "properties": {
+        "requestTypeId": {
+          "type": "integer"
+        },
+        "customFields": {
+          "type": "object"
+        },
+        "siteId": {
+          "type": "string"
+        },
+        "companyName": {
+          "type": "string"
+        },
+        "streetAddress1": {
+          "type": "string"
+        },
+        "streetAddress2": {
+          "type": "string"
+        },
+        "houseNo": {
+          "type": "string"
+        },
+        "postCode": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "telephone": {
+          "type": "string"
+        },
+        "dockHoursFrom": {
+          "type": "string"
+        },
+        "dockHoursTo": {
+          "type": "string"
+        },
+        "isForklift": {
+          "type": "boolean"
+        },
+        "isInsuranceCertificate": {
+          "type": "boolean"
+        },
+        "isLiftGate": {
+          "type": "boolean"
+        },
+        "isSecurityClearance": {
+          "type": "boolean"
+        },
+        "isUnionLabor": {
+          "type": "boolean"
+        },
+        "maxTruckSize": {
+          "type": "string"
+        },
+        "requestCity": {
+          "type": "string"
+        },
+        "requestCountry": {
+          "type": "string"
+        },
+        "securityClearanceDescription": {
+          "type": "string"
+        },
+        "uniounLabourName": {
+          "type": "string"
+        },
+        "primaryContact": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "mobile": {
+          "type": "string"
+        },
+        "secondaryContact": {
+          "type": "string"
+        },
+        "email2": {
+          "type": "string"
+        },
+        "mobile2": {
+          "type": "string"
+        },
+        "assets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "assetName": {
+                "type": "string"
+              },
+              "assetsId": {
+                "type": "integer"
+              },
+              "comments": {
+                "type": "string"
+              },
+              "quantity": {
+                "type": "integer"
+              },
+              "serviceTypeId": {
+                "type": "integer"
+              },
+              "manufacturer": {
+                "type": "string"
+              },
+              "model": {
+                "type": "string"
+              },
+              "part": {
+                "type": "string"
+              },
+              "serial": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "boxCount": {
+          "type": "integer"
+        },
+        "palletCount": {
+          "type": "integer"
+        },
+        "palletWeight": {
+          "type": "integer"
+        },
+        "pickupNote": {
+          "type": "string"
+        },
+        "additionalInfo": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "fieldName": {
+                "type": "string"
+              },
+              "id": {
+                "type": "integer"
+              },
+              "isChecked": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "emailRecipients": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string"
+              },
+              "isDefault": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "service_earlistAvilableDate": {
+          "type": "boolean"
+        },
+        "service_date": {
+          "type": "number"
+        }
+      }
+    },
+    "newRequestResult": {
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "programId": {
+              "type": "number"
+            },
+            "requestTypeId": {
+              "type": "number"
+            },
+            "clientId": {
+              "type": "number"
+            },
+            "displayId": {
+              "type": "string"
+            },
+            "userId": {
+              "type": "string"
+            },
+            "userName": {
+              "type": "string"
+            },
+            "siteId": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "status": {
+              "type": "number"
+            },
+            "lastCompletedStep": {
+              "type": "number"
+            },
+            "securityClearanceDescription": {
+              "type": "string"
+            },
+            "boxCount": {
+              "type": "number"
+            },
+            "palletCount": {
+              "type": "number"
+            },
+            "palletWeight": {
+              "type": "number"
+            },
+            "isRequestSubmitted": {
+              "type": "boolean"
+            },
+            "requestCity": {
+              "type": "string"
+            },
+            "requestCountry": {
+              "type": "string"
+            },
+            "primaryContact": {
+              "type": "boolean"
+            },
+            "uniounLabourName": {
+              "type": "string"
+            },
+            "mobile": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "companyName": {
+              "type": "string"
+            },
+            "dockHoursFrom": {
+              "type": "string"
+            },
+            "dockHoursTo": {
+              "type": "string"
+            },
+            "maxTruckSize": {
+              "type": "string"
+            },
+            "isForklift": {
+              "type": "boolean"
+            },
+            "isLiftGate": {
+              "type": "boolean"
+            },
+            "isSecurityClearance": {
+              "type": "boolean"
+            },
+            "isInsuranceCertificate": {
+              "type": "boolean"
+            },
+            "isUnionLabor": {
+              "type": "boolean"
+            },
+            "mobile2": {
+              "type": "string"
+            },
+            "email2": {
+              "type": "string"
+            },
+            "secondaryContact": {
+              "type": "string"
+            },
+            "requestMailRecepients": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "isDefault": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            },
+            "submittedDate": {
+              "type": "string"
+            },
+            "id": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "newQuotationRequest": {
+      "required": [
+        "requestTypeId",
+        "siteId",
+        "primaryContact",
+        "email",
+        "mobile"
+      ],
+      "properties": {
+        "requestTypeId": {
+          "type": "integer"
+        },
+        "customFields": {
+          "type": "object"
+        },
+        "siteId": {
+          "type": "string"
+        },
+        "companyName": {
+          "type": "string"
+        },
+        "streetAddress1": {
+          "type": "string"
+        },
+        "streetAddress2": {
+          "type": "string"
+        },
+        "houseNo": {
+          "type": "string"
+        },
+        "postCode": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "telephone": {
+          "type": "string"
+        },
+        "dockHoursFrom": {
+          "type": "string"
+        },
+        "dockHoursTo": {
+          "type": "string"
+        },
+        "isForklift": {
+          "type": "boolean"
+        },
+        "isInsuranceCertificate": {
+          "type": "boolean"
+        },
+        "isLiftGate": {
+          "type": "boolean"
+        },
+        "isSecurityClearance": {
+          "type": "boolean"
+        },
+        "isUnionLabor": {
+          "type": "boolean"
+        },
+        "maxTruckSize": {
+          "type": "string"
+        },
+        "requestCity": {
+          "type": "string"
+        },
+        "requestCountry": {
+          "type": "string"
+        },
+        "securityClearanceDescription": {
+          "type": "string"
+        },
+        "uniounLabourName": {
+          "type": "string"
+        },
+        "primaryContact": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "mobile": {
+          "type": "string"
+        },
+        "secondaryContact": {
+          "type": "string"
+        },
+        "email2": {
+          "type": "string"
+        },
+        "mobile2": {
+          "type": "string"
+        },
+        "assets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "assetName": {
+                "type": "string"
+              },
+              "assetsId": {
+                "type": "integer"
+              },
+              "comments": {
+                "type": "string"
+              },
+              "quantity": {
+                "type": "integer"
+              },
+              "manufacturer": {
+                "type": "string"
+              },
+              "model": {
+                "type": "string"
+              },
+              "part": {
+                "type": "string"
+              },
+              "serial": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "serviceId": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number"
+              },
+              "serviceFee": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        "currency": {
+          "type": "string"
+        },
+        "quoteClientMessage": {
+          "type": "string"
+        },
+        "quoteResent": {
+          "type": "number"
+        },
+        "quoteServices": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number"
+              },
+              "value": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "isQuotable": {
+                "type": "boolean"
+              },
+              "checked": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "updatedBy": {
+          "type": "string"
+        }
+      }
+    },
+    "newQuotationRequestResult": {
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "programId": {
+              "type": "number"
+            },
+            "requestTypeId": {
+              "type": "number"
+            },
+            "clientId": {
+              "type": "number"
+            },
+            "displayId": {
+              "type": "string"
+            },
+            "userId": {
+              "type": "string"
+            },
+            "userName": {
+              "type": "string"
+            },
+            "siteId": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "status": {
+              "type": "number"
+            },
+            "lastCompletedStep": {
+              "type": "number"
+            },
+            "securityClearanceDescription": {
+              "type": "string"
+            },
+            "boxCount": {
+              "type": "number"
+            },
+            "palletCount": {
+              "type": "number"
+            },
+            "palletWeight": {
+              "type": "number"
+            },
+            "isRequestSubmitted": {
+              "type": "boolean"
+            },
+            "requestCity": {
+              "type": "string"
+            },
+            "requestCountry": {
+              "type": "string"
+            },
+            "primaryContact": {
+              "type": "boolean"
+            },
+            "uniounLabourName": {
+              "type": "string"
+            },
+            "mobile": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "companyName": {
+              "type": "string"
+            },
+            "dockHoursFrom": {
+              "type": "string"
+            },
+            "dockHoursTo": {
+              "type": "string"
+            },
+            "maxTruckSize": {
+              "type": "string"
+            },
+            "isForklift": {
+              "type": "boolean"
+            },
+            "isLiftGate": {
+              "type": "boolean"
+            },
+            "isSecurityClearance": {
+              "type": "boolean"
+            },
+            "isInsuranceCertificate": {
+              "type": "boolean"
+            },
+            "isUnionLabor": {
+              "type": "boolean"
+            },
+            "mobile2": {
+              "type": "string"
+            },
+            "email2": {
+              "type": "string"
+            },
+            "secondaryContact": {
+              "type": "string"
+            },
+            "quoteResent": {
+              "type": "number"
+            },
+            "isQuoteCompleted": {
+              "type": "boolean"
+            },
+            "id": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "QuotationRequestStatus": {
+      "required": [
+        "Id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "QuotationRequestStatusResult": {
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "requestId": {
+              "type": "number"
+            },
+            "quoteId": {
+              "type": "number"
+            },
+            "clientMessage": {
+              "type": "string"
+            },
+            "tesMessage": {
+              "type": "string"
+            },
+            "quoteMessage": {
+              "type": "string"
+            },
+            "Services": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number"
+                  },
+                  "serviceFee": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "QuotationRequestApproveOrReject": {
+      "required": [
+        "requestId"
+      ],
+      "properties": {
+        "requestId": {
+          "type": "integer"
+        },
+        "requestServiceId": {
+          "type": "integer"
+        },
+        "serviceId": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number"
+              },
+              "value": {
+                "type": "integer"
+              },
+              "isQuoteInitiated": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "clientMessage": {
+          "type": "string"
+        },
+        "approve": {
+          "type": "boolean"
+        },
+        "reject": {
+          "type": "boolean"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "quoteMessage": {
+          "type": "string"
+        },
+        "quoteServices": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number"
+              },
+              "value": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "isQuotable": {
+                "type": "boolean"
+              },
+              "checked": {
+                "type": "boolean"
+              },
+              "quoteFee": {
+                "type": "number"
+              },
+              "isQuoteInitiated": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "tesMessage": {
+          "type": "string"
+        },
+        "updatedBy": {
+          "type": "string"
+        }
+      }
+    },
+    "QuotationRequestApproveOrRejectResult": {
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "programId": {
+              "type": "number"
+            },
+            "requestTypeId": {
+              "type": "number"
+            },
+            "clientId": {
+              "type": "number"
+            },
+            "clientMessage": {
+              "type": "string"
+            },
+            "currency": {
+              "type": "string"
+            },
+            "quoteMessage": {
+              "type": "string"
+            },
+            "quoteServices": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number"
+                  },
+                  "value": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "isQuotable": {
+                    "type": "boolean"
+                  },
+                  "checked": {
+                    "type": "boolean"
+                  },
+                  "quoteFee": {
+                    "type": "number"
+                  },
+                  "isQuoteInitiated": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            },
+            "status": {
+              "type": "number"
+            },
+            "tesMessage": {
+              "type": "string"
+            },
+            "updatedBy": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "number"
+            },
+            "quoteResent": {
+              "type": "number"
+            },
+            "code": {
+              "type": "string"
+            },
+            "isRequestSubmitted": {
+              "type": "boolean"
+            },
+            "submittedDate": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "requestStatus": {
+      "required": [
+        "displayId"
+      ],
+      "properties": {
+        "displayId": {
+          "type": "string"
+        }
+      }
+    },
+    "requestStatusResult": {
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "displayId": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "customField": {
+      "required": [
+        "fieldName"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "uniqueItems": true
+        },
+        "isEnabled": {
+          "type": "boolean"
+        },
+        "isMandatory": {
+          "type": "boolean"
+        },
+        "allowOther": {
+          "type": "boolean"
+        },
+        "fieldName": {
+          "type": "string"
+        },
+        "fieldType": {
+          "type": "string"
+        }
+      }
+    },
+    "customFieldResult": {
+      "type": "array",
+      "$ref": "#/definitions/customField"
+    },
+    "RequestStagesStatus":{
+      "required": [
+        "requestTypeId"
+      ],
+      "properties": {
+        "requestTypeId": {
+          "type": "number"
+        }
+      }
+    },
+    "requestIdFilter":{
+      "required": [
+        "fromDate", 
+        "toDate", 
+        "countries", 
+        "city", 
+        "status", 
+        "email"
+      ],
+      "properties": {
+        "fromDate": {
+          "type": "string"
+        },
+        "toDate": {
+          "type": "string"
+        },
+        "countries": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "requestIdFilterResult": {
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "properties": {
+            "requestId": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "reportType": {
+      "properties": {
+        "docTypeId": {
+          "type": "integer",
+          "uniqueItems": true
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "ReportRequire":{
+      "required": [
+        "displayId",
+        "docTypeId"
+      ],
+      "properties": {
+        "displayId": {
+          "type": "string"
+        },
+        "docTypeId": {
+          "type": "number"
+        }
+      }
+    },
+    "packageDimension": {      
+      "properties": {       
+        "packagingId": {
+          "type": "number"
+        },
+        "maxLength": {
+          "type": "number"          
+        },
+        "maxWidth": {
+          "type": "number"          
+        },
+        "maxHeight": {
+          "type": "number"          
+        }
+      }     
+    },
+    "packingType": {      
+      "properties": {       
+        "goaId": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "maxWeight": {
+          "type": "number"
+        },
+        "hasUnlimitedWeight": {
+          "type": "number"
+        },
+        "maxVolume": {
+          "type": "number"
+        },
+        "showWeight": {
+          "type":"boolean"
+        },
+        "showVolume": {
+          "type":"boolean"
+        },
+        "showDimensions": {
+          "type":"boolean"
+        }
+      }     
+    }
+  }
+}

@@ -17,7 +17,7 @@ const WeatherApp = () => {
     const [location, setLocation] = useState("hanoi");
     const [weatherIcon, setWeatherIcon] = useState("c03d");
     const [currentTemperature, setCurrentTemperature] = useState();
-    const [currentDesc, setcurrentDesc] = useState("123");
+    const [currentDesc, setcurrentDesc] = useState();
     const [currentWind, setcurrentWind] = useState();
     const [currentPressure, setcurrentPressure] = useState();
     const [currentHumidity, setcurrentHumidity] = useState();
@@ -36,9 +36,9 @@ const WeatherApp = () => {
                     <div class="search">
                         <div id="searchForm">
                             <span class="fas fa-search-location"></span>
-                            <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} />
+                            <input type="text" className="f" value={location} onChange={(e) => setLocation(e.target.value)} />
                             <button
-                                class="f smst"
+                                className="f smst"
                                 onClick={async () => {
                                     setIsLoading(true);
                                     const response = await fetch(`http://localhost:5000/weather/${location}`);
