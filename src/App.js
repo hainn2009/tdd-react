@@ -31,7 +31,7 @@ export const router = createBrowserRouter(
             <Route path="/user/:id" element={<UserPage />} />
             <Route path="/todos" loader={todoAppLoader} element={<TodoApp />} />
             <Route path="/weather" element={<WeatherApp />} />
-            {/* <Route path="/api" element={<API />} /> */}
+            <Route path="/api" element={<API />} />
         </Route>
     )
     //     [{
