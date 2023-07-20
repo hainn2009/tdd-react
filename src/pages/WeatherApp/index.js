@@ -50,7 +50,7 @@ const WeatherApp = () => {
                                     setcurrentPressure(data.pressure);
                                     setcurrentHumidity(data.humidity);
                                     setForeCast(data.forecast);
-                                    setIsLoading(false);
+                                    // setIsLoading(false);
                                 }}
                             >
                                 Search
