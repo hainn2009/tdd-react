@@ -50,7 +50,6 @@ const WeatherApp = () => {
                                     setcurrentPressure(data.pressure);
                                     setcurrentHumidity(data.humidity);
                                     setForeCast(data.forecast);
-                                    console.log(data);
                                     setIsLoading(false);
                                 }}
                             >
