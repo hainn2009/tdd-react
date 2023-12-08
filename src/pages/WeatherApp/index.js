@@ -25,17 +25,17 @@ const WeatherApp = () => {
 
     return (
         <div style={{ backgroundColor: "black" }}>
-            <h1 class="f med">Weather App</h1>
-            <div class="weather-pillars pillars">
-                <div class="f med" id="queryLocation">
+            <h1 className="f med">Weather App</h1>
+            <div className="weather-pillars pillars">
+                <div className="f med" id="queryLocation">
                     Enter a location
                 </div>
 
-                <div class="f smst">
+                <div className="f smst">
                     Location <br />
                     <div class="search">
                         <div id="searchForm">
-                            <span class="fas fa-search-location"></span>
+                            <span className="fas fa-search-location"></span>
                             <input type="text" className="f" value={location} onChange={(e) => setLocation(e.target.value)} />
                             <button
                                 className="f smst"
@@ -50,7 +50,7 @@ const WeatherApp = () => {
                                     setcurrentPressure(data.pressure);
                                     setcurrentHumidity(data.humidity);
                                     setForeCast(data.forecast);
-                                    // setIsLoading(false);
+                                    setIsLoading(false);
                                 }}
                             >
                                 Search
