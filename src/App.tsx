@@ -9,10 +9,12 @@ import ErrorPage from "./pages/errorPage";
 import TodoApp from "./pages/TodoApp";
 import WeatherApp from "./pages/WeatherApp";
 import { Test } from "./pages/Test";
+import HomePage from "./pages/HomePage";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
         <Route path="/" element={<App />} errorElement={<ErrorPage />}>
+            <Route index={true} element={<HomePage />} />
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/user/:id" element={<UserPage />} />
