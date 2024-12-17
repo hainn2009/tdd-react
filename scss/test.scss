@@ -1,0 +1,14 @@
+// Cái này âm mưu để có class cursor-pointer trên bootstrap nhưng cũng chả cần, phải chạy sass cơ
+// @import "~bootstrap/scss/bootstrap-utilities";
+@import "../node_modules/bootstrap/scss/bootstrap-utilities";
+//Generate utilites for Cursor
+$utilities: map-merge(
+  $utilities,
+  (
+    "cursor": (
+      property: cursor,
+      values: auto default pointer wait text move help not-allowed
+    ),
+  )
+);
+

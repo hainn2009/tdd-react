@@ -2,7 +2,6 @@ import SignUpPage from "./SignUpPage";
 import LanguageSelector from "../components/LanguageSelector";
 import { render, screen, waitFor, waitForElementToBeRemoved } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import axios from "axios";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
 import i18n from "../locale/i18n";
@@ -29,16 +28,20 @@ describe("Signup Page", () => {
     beforeAll(() => {
         server.listen();
     });
-    beforeEach(() => {
-        i18n.changeLanguage("en");
-        requestBody = null;
-        counter = 0;
+    const setupTest = () => {
         render(
             <>
                 <SignUpPage />
                 <LanguageSelector />
             </>
         );
+    };
+
+    beforeEach(() => {
+        i18n.changeLanguage("en");
+        requestBody = null;
+        counter = 0;
+        setupTest();
         usernameInput = screen.getByLabelText("Username");
         emailInput = screen.getByLabelText("Email");
         passwordInput = screen.getByLabelText("Password");
@@ -53,10 +56,7 @@ describe("Signup Page", () => {
     });
     afterAll(() => server.close());
     describe("Layout", () => {
-        // beforeEach(() => {
-        //     render(<SignUpPage />);
-        // });
-        it("has header", () => {
+        fit("has header", () => {
             const header = screen.queryByRole("heading", { name: "Sign Up" });
             expect(header).toBeInTheDocument();
         });
@@ -110,17 +110,22 @@ describe("Signup Page", () => {
             const button = screen.queryByRole("button", { name: "Sign Up" });
             expect(button).toBeEnabled();
         });
-        it("call the backend when click the Sign Up button", async () => {
+        it("sends username, email and password to the backend when click the Sign Up button", async () => {
             const button = screen.queryByRole("button", { name: "Sign Up" });
+            // Đây là cách mock function đơn giản của jest,
             // const mockfn = jest.fn();
-            // // axios.post = mockfn;
+            // axios.post = mockfn;
             // window.fetch = mockfn;
+            // userEvent.click(button);
+            // const firstCallOfMockFuntion = mockfn.mock.calls[0]; call chứa danh sách tất cả các lần gọi, ta lấy lần 1
+            // //firstCallOfMockFuntion[1] là lấy params thứ 2 của lời gọi (param 1 chính là url, aixos.post(url, body))
+            // const body = firstCallOfMockFuntion[1];
+            // expect(body).toEqual
+
             userEvent.click(button);
 
             await screen.findByText("Please check your e-mail to activate your account");
 
-            // const firstCallOfMockFuntion = mockfn.mock.calls[0];
-            // const body = JSON.parse(firstCallOfMockFuntion[1].body);
             expect(requestBody).toEqual({ username: "user1", email: "user1@mail.com", password: "Password" });
         });
         it("disables sign up button when there is an ongoing api call", async () => {
@@ -140,13 +145,14 @@ describe("Signup Page", () => {
         });
         it("display the spinner after click the Sign Up button", async () => {
             const button = screen.queryByRole("button", { name: "Sign Up" });
-            expect(screen.queryByRole("status", { hidden: true })).not.toBeInTheDocument();
+            expect(screen.queryByRole("status", { hidden: true })).not.toBeInTheDocument(); //tìm cả những thẻ mà aria-idden: true
             userEvent.click(button);
             const spinner = screen.getByRole("status", { hidden: true });
             // Cần phải thực hiện việc waif for ở đây nghĩa là đợi cho các update state chạy hết
             // Sau khi click button, nó còn gọi về backend, update state dựa trên kết quả trả về
             // Bình thường thì test case kết thúc mà không chờ toàn bộ hành động update state
             // Nên sẽ báo warning ở đây dù test case vẫn pass
+            // Thật ra cũng có thể check thêm vì có thể dùng findBy và nó hỗ trợ async/await
             await waitFor(() => {
                 expect(spinner).toBeInTheDocument();
             });
@@ -162,7 +168,6 @@ describe("Signup Page", () => {
         });
         it("hides sign up form after successful sign up request", async () => {
             const button = screen.queryByRole("button", { name: "Sign Up" });
-            const message = "Please check your e-mail to activate your account";
             const form = screen.getByTestId("form-sign-up");
             userEvent.click(button);
             await waitFor(() => {
@@ -170,6 +175,7 @@ describe("Signup Page", () => {
             });
             // await waitForElementToBeRemoved(form);
         });
+        // Finish folder 2 sign up here
         const generateValidationError = (field, message) =>
             rest.post("/api/1.0/users", (req, res, ctx) => {
                 return res(
@@ -269,7 +275,7 @@ describe("Signup Page", () => {
             userEvent.click(vietnameseToggle);
             const passwordInput = screen.getByLabelText(vn.password); // need to remove
             userEvent.type(passwordInput, "1");
-            expect(screen.queryByText(vn.passwordMismatchValidation)).toBeInTheDocument();
+            expect(screen.getByText(vn.passwordMismatchValidation)).toBeInTheDocument();
         });
         it("send accept language header as en for outgoing request", async () => {
             userEvent.type(passwordInput, "P4ssword");

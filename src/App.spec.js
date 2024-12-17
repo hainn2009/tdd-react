@@ -7,7 +7,7 @@ describe("routing", () => {
         window.history.pushState({}, "", path);
         render(<App />);
     };
-    it.each`
+    fit.each`
         path         | pageTestId
         ${"/"}       | ${"home-page"}
         ${"/signup"} | ${"signup-page"}

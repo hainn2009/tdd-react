@@ -79,11 +79,11 @@
   }
   
   .pillars {
-    display: flex;
+    /* display: flex; */
     overflow: hidden;
     align-items: center;
-    flex-wrap: wrap;
-    flex-direction: column;
+    /* flex-wrap: wrap; */
+    /* flex-direction: column; */
   }
   
   .weather-pillars {
