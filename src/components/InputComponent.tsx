@@ -5,10 +5,10 @@ const Input = ({
     help,
     type = "text",
 }: {
-    id: string;
-    label: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    help: string;
+    id?: string;
+    label?: string;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    help?: string;
     type?: string;
 }) => {
     return (
@@ -17,7 +17,11 @@ const Input = ({
                 {label}
             </label>
             <input type={type} id={id} onChange={onChange} className={`form-control ${help ? "is-invalid" : ""}`} />
-            {help && <span className="invalid-feedback">{help}</span>}
+            {help && (
+                <span className="invalid-feedback" role="status">
+                    {help}
+                </span>
+            )}
         </div>
     );
 };

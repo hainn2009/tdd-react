@@ -46,7 +46,6 @@ describe("Signup Page", () => {
         emailInput = screen.getByLabelText("Email");
         passwordInput = screen.getByLabelText("Password");
         passwordRepeatInput = screen.getByLabelText("Password Repeat");
-
         signUpButton = screen.queryByRole("button", { name: "Sign Up" });
     });
     afterEach(() => {
@@ -56,13 +55,11 @@ describe("Signup Page", () => {
     });
     afterAll(() => server.close());
     describe("Layout", () => {
-        fit("has header", () => {
+        it("has header", () => {
             const header = screen.queryByRole("heading", { name: "Sign Up" });
             expect(header).toBeInTheDocument();
         });
         it("has username input", () => {
-            // const { container } = render(<SignUpPage />);
-            // const input = container.querySelector("input");
             const input = screen.getByLabelText("Username");
             expect(input).toBeInTheDocument();
         });
@@ -103,15 +100,9 @@ describe("Signup Page", () => {
             userEvent.type(passwordRepeatInput, "Password");
         });
         it("enables the Sign Up button when password and password repeat are the same", () => {
-            // const passwordInput = screen.getByLabelText("Password");
-            // const passwordRepeatInput = screen.getByLabelText("Password Repeat");
-            // userEvent.type(passwordInput, "Password");
-            // userEvent.type(passwordRepeatInput, "Password");
-            const button = screen.queryByRole("button", { name: "Sign Up" });
-            expect(button).toBeEnabled();
+            expect(signUpButton).toBeEnabled();
         });
         it("sends username, email and password to the backend when click the Sign Up button", async () => {
-            const button = screen.queryByRole("button", { name: "Sign Up" });
             // Đây là cách mock function đơn giản của jest,
             // const mockfn = jest.fn();
             // axios.post = mockfn;
@@ -122,10 +113,9 @@ describe("Signup Page", () => {
             // const body = firstCallOfMockFuntion[1];
             // expect(body).toEqual
 
-            userEvent.click(button);
-
+            // The server config code is above but it's actually difficult to follow
+            userEvent.click(signUpButton);
             await screen.findByText("Please check your e-mail to activate your account");
-
             expect(requestBody).toEqual({ username: "user1", email: "user1@mail.com", password: "Password" });
         });
         it("disables sign up button when there is an ongoing api call", async () => {
@@ -175,7 +165,6 @@ describe("Signup Page", () => {
             });
             // await waitForElementToBeRemoved(form);
         });
-        // Finish folder 2 sign up here
         const generateValidationError = (field, message) =>
             rest.post("/api/1.0/users", (req, res, ctx) => {
                 return res(
@@ -201,7 +190,7 @@ describe("Signup Page", () => {
             const button = screen.queryByRole("button", { name: "Sign Up" });
             userEvent.click(button);
             await screen.findByText("Username cannot be null");
-            // get the spinner
+            // get the spinner, We have indicated in the span tag that the role field has a value of status
             expect(screen.queryByRole("status")).not.toBeInTheDocument();
             expect(button).toBeEnabled();
         });
