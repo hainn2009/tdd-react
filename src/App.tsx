@@ -29,11 +29,7 @@ function App() {
         <>
             <nav className="navbar navbar-expand bg-light shadow-sm nav-pills">
                 <div className="container">
-                    {/* <a className="navbar-brand" href="/" title="Home" onClick={handleNavLinkClick}>
-                        <img src={logo} alt="My TDD project" width="60" />
-                        My TDD project
-                    </a> */}
-                    <Link className="navbar-brand" to="/" title="Home">
+                    <Link className="navbar-brand text-primary" to="/" title="Home">
                         <img src={logo} alt="My TDD project" width="60" />
                         My TDD project
                     </Link>
