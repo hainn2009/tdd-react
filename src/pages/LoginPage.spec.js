@@ -5,8 +5,11 @@ import userEvent from "@testing-library/user-event";
 
 describe("Login Page", () => {
     describe("Layout", () => {
-        beforeEach(() => {
+        const setupTest = () => {
             render(<LoginPage />);
+        };
+        beforeEach(() => {
+            setupTest();
         });
         it("has header of Login", () => {
             render(<LoginPage />);

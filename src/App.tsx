@@ -10,12 +10,14 @@ import TodoApp from "./pages/TodoApp";
 import WeatherApp from "./pages/WeatherApp";
 import { Test } from "./pages/Test";
 import HomePage from "./pages/HomePage";
+import AccountActivationPage from "./pages/AccountActivationPage";
 
 export const routerConfig = createRoutesFromElements(
     <Route path="/" element={<App />} errorElement={<ErrorPage />}>
         <Route index={true} element={<HomePage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/activate/:token" element={<AccountActivationPage />} />
         <Route path="/user/:id" element={<UserPage />} />
         <Route path="/todos" element={<TodoApp />} />
         <Route path="/weather" element={<WeatherApp />} />
