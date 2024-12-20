@@ -6,9 +6,9 @@ const Input = ({
     type = "text",
 }: {
     id?: string;
-    label?: string;
+    label?: string | null;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    help?: string;
+    help?: string | null;
     type?: string;
 }) => {
     return (
@@ -18,7 +18,7 @@ const Input = ({
             </label>
             <input type={type} id={id} onChange={onChange} className={`form-control ${help ? "is-invalid" : ""}`} />
             {help && (
-                <span className="invalid-feedback" role="status">
+                <span className="invalid-feedback" data-testid="spinner">
                     {help}
                 </span>
             )}

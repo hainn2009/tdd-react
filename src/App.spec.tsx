@@ -1,13 +1,15 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import App from "./App";
+import { routerConfig } from "./App";
+import { RouterProvider, createMemoryRouter } from "react-router-dom";
 
 describe("routing", () => {
-    const setup = (path) => {
+    const setup = (path: string) => {
+        // Change the url manually (not user any library)
         window.history.pushState({}, "", path);
-        render(<App />);
+        render(<RouterProvider router={createMemoryRouter(routerConfig, { initialEntries: [path] })} />);
     };
-    fit.each`
+    it.each`
         path         | pageTestId
         ${"/"}       | ${"home-page"}
         ${"/signup"} | ${"signup-page"}
@@ -38,25 +40,26 @@ describe("routing", () => {
         const page = screen.queryByTestId(pageTestId);
         expect(page).not.toBeInTheDocument();
     });
+
     it.each`
         pageName
-        ${"Home"}
-        ${"Signup"}
+        ${"My TDD project My TDD project"}
+        ${"Sign Up"}
         ${"Login"}
     `("display link to the $pageName page in the navbar", ({ pageName }) => {
         setup("/");
-        const link = screen.queryByRole("link", { name: pageName });
+        const link = screen.getByRole("link", { name: pageName });
         expect(link).toBeInTheDocument();
     });
     it.each`
-        initialPath  | clickedPath | pageTestId
-        ${"/"}       | ${"Signup"} | ${"signup-page"}
-        ${"/signup"} | ${"Home"}   | ${"home-page"}
-        ${"/signup"} | ${"Login"}  | ${"login-page"}
-    `("display $pageTestId after clicking $clickedPath link", ({ initialPath, clickedPath, pageTestId }) => {
+        initialPath  | clickedPath                        | pageTestId
+        ${"/"}       | ${"Sign Up"}                       | ${"signup-page"}
+        ${"/signup"} | ${"My TDD project My TDD project"} | ${"home-page"}
+        ${"/signup"} | ${"Login"}                         | ${"login-page"}
+    `("display $pageTestId after clicking $clickedPath link", async ({ initialPath, clickedPath, pageTestId }) => {
         setup(initialPath);
         const link = screen.getByRole("link", { name: clickedPath });
-        userEvent.click(link);
+        await userEvent.click(link);
         expect(screen.getByTestId(pageTestId)).toBeInTheDocument();
     });
 });

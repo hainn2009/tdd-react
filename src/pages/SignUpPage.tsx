@@ -42,11 +42,11 @@ const SignUpPage = () => {
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 // Handle Axios error
-                console.error("Axios error:", error.message);
+                // console.error("Axios error:", error.message);
                 if (error.response) {
                     // Server responded with a status other than 200 range
-                    console.error("Response data:", error.response.data);
-                    console.error("Response status:", error.response.status);
+                    // console.error("Response data:", error.response.data);
+                    // console.error("Response status:", error.response.status);
                     if (error.response.status === 400) {
                         setErrors(error.response.data.validationErrors);
                     }

@@ -9,9 +9,10 @@ import en from "../locale/en.json";
 import vn from "../locale/vn.json";
 
 describe("Signup Page", () => {
-    let requestBody;
+    const user = userEvent.setup();
+    let requestBody: {} | null;
     let counter = 0;
-    let acceptLanguageHeader;
+    let acceptLanguageHeader: string | null;
     const server = setupServer(
         rest.post("/api/1.0/users", async (req, res, ctx) => {
             requestBody = await req.json();
@@ -20,11 +21,12 @@ describe("Signup Page", () => {
             return res(ctx.status(200));
         })
     );
-    let passwordInput;
-    let passwordRepeatInput;
-    let signUpButton;
-    let usernameInput;
-    let emailInput;
+    let passwordInput: HTMLInputElement;
+    let passwordRepeatInput: HTMLInputElement;
+    let usernameInput: HTMLInputElement;
+    let emailInput: HTMLInputElement;
+    let signUpButton: HTMLButtonElement | null;
+
     beforeAll(() => {
         server.listen();
     });
@@ -72,7 +74,7 @@ describe("Signup Page", () => {
             expect(input).toBeInTheDocument();
         });
         it("has password type for password input", () => {
-            const input = screen.getByLabelText("Password");
+            const input = screen.getByLabelText<HTMLInputElement>("Password");
             expect(input.type).toBe("password");
         });
         it("has password repeat input", () => {
@@ -80,7 +82,7 @@ describe("Signup Page", () => {
             expect(input).toBeInTheDocument();
         });
         it("has password type for password repeat input", () => {
-            const input = screen.getByLabelText("Password Repeat");
+            const input = screen.getByLabelText<HTMLInputElement>("Password Repeat");
             expect(input.type).toBe("password");
         });
         it("has Sign up button", () => {
@@ -93,13 +95,15 @@ describe("Signup Page", () => {
         });
     });
     describe("Interactions", () => {
-        beforeEach(() => {
-            userEvent.type(usernameInput, "user1");
-            userEvent.type(emailInput, "user1@mail.com");
-            userEvent.type(passwordInput, "Password");
-            userEvent.type(passwordRepeatInput, "Password");
+        beforeEach(async () => {
+            await user.type(usernameInput, "user1");
+            await user.type(emailInput, "user1@mail.com");
+            await user.type(passwordInput, "Password");
+            await user.type(passwordRepeatInput, "Password");
         });
-        it("enables the Sign Up button when password and password repeat are the same", () => {
+        // const inputDefaultData
+
+        it("enables the Sign Up button when password and password repeat are the same", async () => {
             expect(signUpButton).toBeEnabled();
         });
         it("sends username, email and password to the backend when click the Sign Up button", async () => {
@@ -114,7 +118,7 @@ describe("Signup Page", () => {
             // expect(body).toEqual
 
             // The server config code is above but it's actually difficult to follow
-            userEvent.click(signUpButton);
+            if (signUpButton) userEvent.click(signUpButton);
             await screen.findByText("Please check your e-mail to activate your account");
             expect(requestBody).toEqual({ username: "user1", email: "user1@mail.com", password: "Password" });
         });
@@ -124,9 +128,11 @@ describe("Signup Page", () => {
             // const mockfn = jest.fn();
             // // axios.post = mockfn;
             // window.fetch = mockfn;
+            if (button) {
+                userEvent.click(button);
+                userEvent.click(button);
+            }
 
-            userEvent.click(button);
-            userEvent.click(button);
             await screen.findByText("Please check your e-mail to activate your account");
 
             // const firstCallOfMockFuntion = mockfn.mock.calls[0];
@@ -136,22 +142,25 @@ describe("Signup Page", () => {
         it("display the spinner after click the Sign Up button", async () => {
             const button = screen.queryByRole("button", { name: "Sign Up" });
             expect(screen.queryByRole("status", { hidden: true })).not.toBeInTheDocument(); //tìm cả những thẻ mà aria-idden: true
-            userEvent.click(button);
-            const spinner = screen.getByRole("status", { hidden: true });
+            if (button) userEvent.click(button);
             // Cần phải thực hiện việc waif for ở đây nghĩa là đợi cho các update state chạy hết
             // Sau khi click button, nó còn gọi về backend, update state dựa trên kết quả trả về
             // Bình thường thì test case kết thúc mà không chờ toàn bộ hành động update state
             // Nên sẽ báo warning ở đây dù test case vẫn pass
             // Thật ra cũng có thể check thêm vì có thể dùng findBy và nó hỗ trợ async/await
-            await waitFor(() => {
-                expect(spinner).toBeInTheDocument();
-            });
+            // const spinner = screen.getByRole("status", { hidden: true });
+            // await waitFor(() => {
+            //     expect(spinner).toBeInTheDocument();
+            // });
+
+            const spinner = await screen.findByRole("status", { hidden: true });
+            expect(spinner).toBeInTheDocument();
         });
         it("display account activation notification after successful sign up request", async () => {
             const button = screen.queryByRole("button", { name: "Sign Up" });
             const message = "Please check your e-mail to activate your account";
             expect(screen.queryByText(message)).not.toBeInTheDocument();
-            userEvent.click(button);
+            if (button) userEvent.click(button);
             // cái này nghĩa là chờ cho đến khi
             const text = await screen.findByText(message);
             expect(text).toBeInTheDocument();
@@ -159,13 +168,13 @@ describe("Signup Page", () => {
         it("hides sign up form after successful sign up request", async () => {
             const button = screen.queryByRole("button", { name: "Sign Up" });
             const form = screen.getByTestId("form-sign-up");
-            userEvent.click(button);
+            if (button) userEvent.click(button);
             await waitFor(() => {
                 expect(form).not.toBeInTheDocument();
             });
             // await waitForElementToBeRemoved(form);
         });
-        const generateValidationError = (field, message) =>
+        const generateValidationError = (field: string, message: string) =>
             rest.post("/api/1.0/users", (req, res, ctx) => {
                 return res(
                     ctx.status(400),
@@ -182,13 +191,13 @@ describe("Signup Page", () => {
         `("displays $message for $field", async ({ field, message }) => {
             server.use(generateValidationError(field, message));
             const button = screen.queryByRole("button", { name: "Sign Up" });
-            userEvent.click(button);
+            if (button) user.click(button);
             expect(await screen.findByText(message)).toBeInTheDocument();
         });
         it("hide the spinner and enable the sign up button after api response received", async () => {
             server.use(generateValidationError("username", "Username cannot be null"));
             const button = screen.queryByRole("button", { name: "Sign Up" });
-            userEvent.click(button);
+            if (button) userEvent.click(button);
             await screen.findByText("Username cannot be null");
             // get the spinner, We have indicated in the span tag that the role field has a value of status
             expect(screen.queryByRole("status")).not.toBeInTheDocument();
@@ -206,17 +215,17 @@ describe("Signup Page", () => {
             ${"password"} | ${"Password cannot be null"} | ${"Password"}
         `("clear the validation error after $field field is updated", async ({ field, message, label }) => {
             server.use(generateValidationError(field, message));
-            const button = screen.queryByRole("button", { name: "Sign Up" });
-            userEvent.click(button);
+            const button = screen.getByRole("button", { name: "Sign Up" });
+            user.click(button);
             const validationError = await screen.findByText(message);
-            userEvent.type(screen.queryByLabelText(label), "updated");
+            await user.type(screen.getByLabelText(label), "updated");
             expect(validationError).not.toBeInTheDocument();
         });
     });
     describe("Internationalization", () => {
-        let englishToggle, vietnameseToggle;
+        let englishToggle: HTMLElement, vietnameseToggle: HTMLElement;
 
-        beforeEach(() => {
+        beforeEach(async () => {
             // i18n.changeLanguage("en");
             // render(
             //     <>
@@ -226,10 +235,10 @@ describe("Signup Page", () => {
             // );
             englishToggle = screen.getByTitle("English");
             vietnameseToggle = screen.getByTitle("Tiếng Việt");
-            userEvent.type(usernameInput, "user1");
-            userEvent.type(emailInput, "user1@mail.com");
-            userEvent.type(passwordInput, "Password");
-            userEvent.type(passwordRepeatInput, "Password");
+            await userEvent.type(usernameInput, "user1");
+            await userEvent.type(emailInput, "user1@mail.com");
+            await userEvent.type(passwordInput, "Password");
+            await userEvent.type(passwordRepeatInput, "Password");
         });
         it("Initially display all texts in English", () => {
             expect(screen.getByRole("heading", { name: en.signUp })).toBeInTheDocument();
@@ -239,8 +248,8 @@ describe("Signup Page", () => {
             expect(screen.getByLabelText(en.password)).toBeInTheDocument();
             expect(screen.getByLabelText(en.passwordRepeat)).toBeInTheDocument();
         });
-        it("Display all texts in Vietnamese after changing the language", () => {
-            userEvent.click(vietnameseToggle);
+        it("Display all texts in Vietnamese after changing the language", async () => {
+            await userEvent.click(vietnameseToggle);
 
             expect(screen.getByRole("heading", { name: vn.signUp })).toBeInTheDocument();
             expect(screen.getByRole("button", { name: vn.signUp })).toBeInTheDocument();
@@ -249,9 +258,9 @@ describe("Signup Page", () => {
             expect(screen.getByLabelText(vn.password)).toBeInTheDocument();
             expect(screen.getByLabelText(vn.passwordRepeat)).toBeInTheDocument();
         });
-        it("Display all texts in English after changing back from Vietnamese", () => {
-            userEvent.click(vietnameseToggle);
-            userEvent.click(englishToggle);
+        it("Display all texts in English after changing back from Vietnamese", async () => {
+            await userEvent.click(vietnameseToggle);
+            await userEvent.click(englishToggle);
 
             expect(screen.getByRole("heading", { name: en.signUp })).toBeInTheDocument();
             expect(screen.getByRole("button", { name: en.signUp })).toBeInTheDocument();
@@ -260,17 +269,17 @@ describe("Signup Page", () => {
             expect(screen.getByLabelText(en.password)).toBeInTheDocument();
             expect(screen.getByLabelText(en.passwordRepeat)).toBeInTheDocument();
         });
-        it("Display password mismatch validation in Vietnamese", () => {
-            userEvent.click(vietnameseToggle);
+        it("Display password mismatch validation in Vietnamese", async () => {
+            await userEvent.click(vietnameseToggle);
             const passwordInput = screen.getByLabelText(vn.password); // need to remove
-            userEvent.type(passwordInput, "1");
+            await userEvent.type(passwordInput, "1");
             expect(screen.getByText(vn.passwordMismatchValidation)).toBeInTheDocument();
         });
         it("send accept language header as en for outgoing request", async () => {
             userEvent.type(passwordInput, "P4ssword");
             userEvent.type(passwordRepeatInput, "P4ssword");
             const form = screen.queryByTestId("form-sign-up");
-            userEvent.click(signUpButton);
+            if (signUpButton) userEvent.click(signUpButton);
             await waitForElementToBeRemoved(form);
             expect(acceptLanguageHeader).toBe("en");
         });
@@ -279,7 +288,7 @@ describe("Signup Page", () => {
             userEvent.type(passwordRepeatInput, "P4ssword");
             userEvent.click(vietnameseToggle);
             const form = screen.queryByTestId("form-sign-up");
-            userEvent.click(signUpButton);
+            if (signUpButton) userEvent.click(signUpButton);
             await waitForElementToBeRemoved(form);
             expect(acceptLanguageHeader).toBe("vn");
         });

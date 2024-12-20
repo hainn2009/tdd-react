@@ -11,19 +11,19 @@ import WeatherApp from "./pages/WeatherApp";
 import { Test } from "./pages/Test";
 import HomePage from "./pages/HomePage";
 
-export const router = createBrowserRouter(
-    createRoutesFromElements(
-        <Route path="/" element={<App />} errorElement={<ErrorPage />}>
-            <Route index={true} element={<HomePage />} />
-            <Route path="/signup" element={<SignUpPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/user/:id" element={<UserPage />} />
-            <Route path="/todos" element={<TodoApp />} />
-            <Route path="/weather" element={<WeatherApp />} />
-            <Route path="test" element={<Test />} />
-        </Route>
-    )
+export const routerConfig = createRoutesFromElements(
+    <Route path="/" element={<App />} errorElement={<ErrorPage />}>
+        <Route index={true} element={<HomePage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/user/:id" element={<UserPage />} />
+        <Route path="/todos" element={<TodoApp />} />
+        <Route path="/weather" element={<WeatherApp />} />
+        <Route path="test" element={<Test />} />
+    </Route>
 );
+
+export const router = createBrowserRouter(routerConfig);
 
 function App() {
     const { t } = useTranslation();
