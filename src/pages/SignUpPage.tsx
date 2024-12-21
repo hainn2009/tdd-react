@@ -3,6 +3,8 @@ import { useTranslation } from "react-i18next";
 import Input from "../components/InputComponent";
 import { signUp } from "../api/apiCall";
 import axios from "axios";
+import Alert from "../components/Alert";
+import Spinner from "../components/Spinner";
 
 const SignUpPage = () => {
     const [username, setUsername] = useState("");
@@ -64,7 +66,7 @@ const SignUpPage = () => {
     return (
         <div className="col-lg-6 offset-lg-3 col-md-8 offset-md-2" data-testid="signup-page">
             {!signUpSuccess && (
-                <form className="card mt-5" data-testid="form-sign-up">
+                <form className="card" data-testid="form-sign-up">
                     <div className="card-header">
                         <h1 className="text-center">{t("signUp")}</h1>
                     </div>
@@ -121,20 +123,14 @@ const SignUpPage = () => {
                                 onClick={handleSubmit}
                                 disabled={!password || !passwordRepeat || password !== passwordRepeat || apiProgress}
                             >
-                                {apiProgress && (
-                                    <span
-                                        className="spinner-border spinner-border-sm"
-                                        role="status"
-                                        aria-hidden="true" // cái này nghĩa là view from accessibility thì nó là hidden vì vốn không cần nó làm gì
-                                    ></span>
-                                )}
+                                {apiProgress && <Spinner size="small" />}
                                 {t("signUp")}
                             </button>
                         </div>
                     </div>
                 </form>
             )}
-            {signUpSuccess && <div className="alert alert-success mt-3">Please check your e-mail to activate your account</div>}
+            {signUpSuccess && <Alert type="success">"Please check your e-mail to activate your account"</Alert>}
         </div>
     );
 };

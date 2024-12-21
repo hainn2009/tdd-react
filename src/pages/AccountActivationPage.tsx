@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { activate } from "../api/apiCall";
 import { useEffect, useState } from "react";
 import Alert from "../components/Alert";
+import Spinner from "../components/Spinner";
 
 const AccountActivationPage = ({ match }: { match?: object }) => {
     const param = useParams();
@@ -19,11 +20,13 @@ const AccountActivationPage = ({ match }: { match?: object }) => {
     }, [param.token]);
 
     const content = !result ? (
-        <span className="spinner-border" role="status"></span>
+        <Alert type="secondary" center>
+            <Spinner size="big" />
+        </Alert>
     ) : result === "success" ? (
-        <Alert type="success" text="Account is activated" />
+        <Alert type="success">Account is activated</Alert>
     ) : (
-        <Alert type="success" text="Activation failure" />
+        <Alert type="danger">Activation failure</Alert>
     );
     return (
         <div data-testid="activation-page">

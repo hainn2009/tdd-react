@@ -62,7 +62,7 @@ function App() {
                     </div>
                 </div>
             </nav>
-            <div className="container">
+            <div className="container pt-3">
                 <Outlet />
                 {/* <Route exact path="/" component={HomePage} /> */}
                 {/* <Route path="/signup" component={SignUpPage} />
