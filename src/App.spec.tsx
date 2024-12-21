@@ -6,38 +6,12 @@ import { RouterProvider, createMemoryRouter } from "react-router-dom";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
 
-const page1 = {
-    content: [
-        {
-            id: 1,
-            username: "user1",
-            email: "user1@mail.com",
-            image: null,
-        },
-        {
-            id: 2,
-            username: "user2",
-            email: "user2@mail.com",
-            image: null,
-        },
-        {
-            id: 3,
-            username: "user3",
-            email: "user3@mail.com",
-            image: null,
-        },
-    ],
-    page: 0,
-    size: 3,
-    totalPages: 9,
-};
-
 const server = setupServer(
     rest.post("/api/1.0/users/token/:token", (req, res, ctx) => {
         return res(ctx.status(200));
     }),
     rest.get("/api/1.0/users", (req, res, ctx) => {
-        return res(ctx.status(200), ctx.json(page1));
+        return res(ctx.status(200), ctx.json({ content: [], page: 0, size: 0, totalPages: 0 }));
     })
 );
 beforeAll(() => server.listen());

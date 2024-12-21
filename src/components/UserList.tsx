@@ -14,7 +14,7 @@ const UserList = () => {
             try {
                 const {
                     data: { content, page, size, totalPages },
-                } = await loadUsers();
+                } = await loadUsers(0, 3);
                 setContent(content);
                 setPage(page);
                 setSize(size);
@@ -29,12 +29,34 @@ const UserList = () => {
         <div className="card">
             <div className="card-header text-center">
                 <h3>Users</h3>
-                {page} {size} {totalPages}
+            </div>
+            {page} {size} {totalPages}
+            <ul className="list-group list-group-flush">
                 {result &&
                     content.map((user: any, index) => {
-                        return <span key={index}>{user.username}</span>;
+                        //TODO: can sua any o day
+                        return (
+                            <li className="list-group-item list-group-item-action" key={index}>
+                                {user.username}
+                            </li>
+                        );
                     })}
-            </div>
+            </ul>
+            {totalPages > page + 1 && (
+                <button
+                    onClick={async () => {
+                        const {
+                            data: { content, page: currentPage, size, totalPages },
+                        } = await loadUsers(page + 1);
+                        setContent(content);
+                        setPage(currentPage);
+                        setSize(size);
+                        setTotalPages(totalPages);
+                    }}
+                >
+                    next &gt;
+                </button>
+            )}
         </div>
     );
 };
