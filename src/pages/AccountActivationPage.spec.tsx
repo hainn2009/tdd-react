@@ -3,7 +3,6 @@ import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import { routerConfig } from "../App";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
-import userEvent from "@testing-library/user-event";
 
 let counter = 0;
 const server = setupServer(

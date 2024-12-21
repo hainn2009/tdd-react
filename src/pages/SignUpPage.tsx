@@ -130,7 +130,7 @@ const SignUpPage = () => {
                     </div>
                 </form>
             )}
-            {signUpSuccess && <Alert type="success">"Please check your e-mail to activate your account"</Alert>}
+            {signUpSuccess && <Alert type="success">Please check your e-mail to activate your account</Alert>}
         </div>
     );
 };

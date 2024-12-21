@@ -6,9 +6,38 @@ import { RouterProvider, createMemoryRouter } from "react-router-dom";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
 
+const page1 = {
+    content: [
+        {
+            id: 1,
+            username: "user1",
+            email: "user1@mail.com",
+            image: null,
+        },
+        {
+            id: 2,
+            username: "user2",
+            email: "user2@mail.com",
+            image: null,
+        },
+        {
+            id: 3,
+            username: "user3",
+            email: "user3@mail.com",
+            image: null,
+        },
+    ],
+    page: 0,
+    size: 3,
+    totalPages: 9,
+};
+
 const server = setupServer(
     rest.post("/api/1.0/users/token/:token", (req, res, ctx) => {
         return res(ctx.status(200));
+    }),
+    rest.get("/api/1.0/users", (req, res, ctx) => {
+        return res(ctx.status(200), ctx.json(page1));
     })
 );
 beforeAll(() => server.listen());
@@ -37,26 +66,26 @@ describe("routing", () => {
         expect(page).toBeInTheDocument();
     });
     it.each`
-        path           | pageTestId
-        ${"/"}         | ${"signup-page"}
-        ${"/"}         | ${"login-page"}
-        ${"/"}         | ${"user-page"}
-        ${"/"}         | ${"activation-page"}
-        ${"/signup"}   | ${"home-page"}
-        ${"/signup"}   | ${"login-page"}
-        ${"/signup"}   | ${"user-page"}
-        ${"/signup"}   | ${"activation-page"}
-        ${"/login"}    | ${"home-page"}
-        ${"/login"}    | ${"signup-page"}
-        ${"/login"}    | ${"user-page"}
-        ${"/login"}    | ${"activation-page"}
-        ${"/user/1"}   | ${"home-page"}
-        ${"/user/1"}   | ${"signup-page"}
-        ${"/user/1"}   | ${"login-page"}
-        ${"/activate"} | ${"home-page"}
-        ${"/activate"} | ${"signup-page"}
-        ${"/activate"} | ${"user-page"}
-        ${"/activate"} | ${"user-page"}
+        path               | pageTestId
+        ${"/"}             | ${"signup-page"}
+        ${"/"}             | ${"login-page"}
+        ${"/"}             | ${"user-page"}
+        ${"/"}             | ${"activation-page"}
+        ${"/signup"}       | ${"home-page"}
+        ${"/signup"}       | ${"login-page"}
+        ${"/signup"}       | ${"user-page"}
+        ${"/signup"}       | ${"activation-page"}
+        ${"/login"}        | ${"home-page"}
+        ${"/login"}        | ${"signup-page"}
+        ${"/login"}        | ${"user-page"}
+        ${"/login"}        | ${"activation-page"}
+        ${"/user/1"}       | ${"home-page"}
+        ${"/user/1"}       | ${"signup-page"}
+        ${"/user/1"}       | ${"login-page"}
+        ${"/activate/123"} | ${"home-page"}
+        ${"/activate/123"} | ${"signup-page"}
+        ${"/activate/123"} | ${"user-page"}
+        ${"/activate/123"} | ${"user-page"}
     `("does not display $pageTestId when path is $path", ({ path, pageTestId }) => {
         setup(path);
         const page = screen.queryByTestId(pageTestId);
