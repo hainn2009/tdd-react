@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { loadUsers } from "../api/apiCall";
+import { useNavigate } from "react-router-dom";
 
 const UserList = () => {
     // TODO need to do something with result
@@ -7,6 +8,7 @@ const UserList = () => {
     const [content, setContent] = useState([]);
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
+    const navigate = useNavigate();
 
     const loadData = async (pageIndex: number = 0) => {
         setResult("");
@@ -37,7 +39,12 @@ const UserList = () => {
                     content.map((user: any, index) => {
                         //TODO: can sua any o day
                         return (
-                            <li className="list-group-item list-group-item-action" key={index}>
+                            <li
+                                className="list-group-item list-group-item-action"
+                                style={{ cursor: "pointer" }}
+                                key={index}
+                                onClick={() => navigate(`/user/${user.id}`)}
+                            >
                                 {user.username}
                             </li>
                         );

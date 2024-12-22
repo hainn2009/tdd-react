@@ -3,6 +3,7 @@ import { setupServer } from "msw/node";
 import { rest } from "msw";
 import UserList from "./UserList";
 import userEvent from "@testing-library/user-event";
+import { MemoryRouter } from "react-router-dom";
 
 const users = [
     {
@@ -80,25 +81,31 @@ afterAll(() => server.close());
 
 describe("User List", () => {
     const userAction = userEvent.setup();
-
+    const setup = () => {
+        render(
+            <MemoryRouter>
+                <UserList />
+            </MemoryRouter>
+        );
+    };
     it("Display three users in list", async () => {
-        render(<UserList />);
+        setup();
         const users = await screen.findAllByText(/user/);
         expect(users.length).toBe(3);
     });
     it("display next page link", async () => {
-        render(<UserList />);
+        setup();
         await screen.findByText("user1");
         expect(screen.getByText(/next >/)).toBeInTheDocument();
     });
     it("display next page after clicking on next page link", async () => {
-        render(<UserList />);
+        setup();
         await screen.findByText("user1");
         await userAction.click(screen.getByText(/next >/));
         expect(screen.getByText("user4")).toBeInTheDocument();
     });
     it("hide next page link at last page", async () => {
-        render(<UserList />);
+        setup();
         await screen.findByText("user1");
         const nextPageLink = screen.getByText(/next >/);
         await userAction.click(nextPageLink);
@@ -106,13 +113,13 @@ describe("User List", () => {
         expect(nextPageLink).not.toBeInTheDocument();
     });
     it("does not show previous page link when in first page", async () => {
-        render(<UserList />);
+        setup();
         await screen.findByText("user1");
         const previousePageLink = screen.queryByText(/< previous/);
         expect(previousePageLink).not.toBeInTheDocument();
     });
     it("display previous page after clicking previous page link", async () => {
-        render(<UserList />);
+        setup();
         await screen.findByText("user1");
         await userAction.click(screen.getByText(/next >/));
         expect(screen.getByText("user4")).toBeInTheDocument();

@@ -1,17 +1,19 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { routerConfig } from "./App";
-import { RouterProvider, createMemoryRouter } from "react-router-dom";
+import App, { routerConfig } from "./App";
+import { RouterProvider, createMemoryRouter, BrowserRouter, MemoryRouter } from "react-router-dom";
 
 import { setupServer } from "msw/node";
 import { rest } from "msw";
+
+const userAction = userEvent.setup();
 
 const server = setupServer(
     rest.post("/api/1.0/users/token/:token", (req, res, ctx) => {
         return res(ctx.status(200));
     }),
     rest.get("/api/1.0/users", (req, res, ctx) => {
-        return res(ctx.status(200), ctx.json({ content: [], page: 0, size: 0, totalPages: 0 }));
+        return res(ctx.status(200), ctx.json({ content: [{ id: 1, username: "user1", email: "user1@gmail.com" }], page: 0, size: 0, totalPages: 0 }));
     })
 );
 beforeAll(() => server.listen());
@@ -86,5 +88,17 @@ describe("routing", () => {
         const link = screen.getByRole("link", { name: clickedPath });
         await userEvent.click(link);
         expect(screen.getByTestId(pageTestId)).toBeInTheDocument();
+    });
+    it("display home page when clicking brand logo", async () => {
+        setup("/login");
+        const logo = screen.getByAltText("My TDD project");
+        await userAction.click(logo);
+        expect(screen.getByTestId("home-page")).toBeInTheDocument();
+    });
+    it("navigate to user page when clicking username", async () => {
+        setup("/");
+        const user1 = await screen.findByText("user1");
+        await userAction.click(user1);
+        expect(screen.getByTestId("user-page")).toBeInTheDocument();
     });
 });
