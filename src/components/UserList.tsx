@@ -2,35 +2,36 @@ import { useEffect, useState } from "react";
 import { loadUsers } from "../api/apiCall";
 
 const UserList = () => {
+    // TODO need to do something with result
     const [result, setResult] = useState("");
     const [content, setContent] = useState([]);
     const [page, setPage] = useState(0);
-    const [size, setSize] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
 
+    const loadData = async (pageIndex: number = 0) => {
+        setResult("");
+        try {
+            const {
+                data: { content, page, totalPages },
+            } = await loadUsers(pageIndex);
+            setContent(content);
+            setPage(page);
+            setTotalPages(totalPages);
+            setResult("success");
+        } catch (error) {
+            setResult("fail");
+        }
+    };
+
     useEffect(() => {
-        (async function () {
-            setResult("");
-            try {
-                const {
-                    data: { content, page, size, totalPages },
-                } = await loadUsers(0, 3);
-                setContent(content);
-                setPage(page);
-                setSize(size);
-                setTotalPages(totalPages);
-                setResult("success");
-            } catch (error) {
-                setResult("fail");
-            }
-        })();
+        loadData();
     }, []);
+
     return (
         <div className="card">
             <div className="card-header text-center">
                 <h3>Users</h3>
             </div>
-            {page} {size} {totalPages}
             <ul className="list-group list-group-flush">
                 {result &&
                     content.map((user: any, index) => {
@@ -42,21 +43,18 @@ const UserList = () => {
                         );
                     })}
             </ul>
-            {totalPages > page + 1 && (
-                <button
-                    onClick={async () => {
-                        const {
-                            data: { content, page: currentPage, size, totalPages },
-                        } = await loadUsers(page + 1);
-                        setContent(content);
-                        setPage(currentPage);
-                        setSize(size);
-                        setTotalPages(totalPages);
-                    }}
-                >
-                    next &gt;
-                </button>
-            )}
+            <div className="card-footer">
+                {page > 0 && (
+                    <button className="btn btn-outline-secondary btn-sm" onClick={() => loadData(page - 1)}>
+                        &lt; previous
+                    </button>
+                )}
+                {totalPages > page + 1 && (
+                    <button className="btn btn-outline-secondary btn-sm" onClick={() => loadData(page + 1)}>
+                        next &gt;
+                    </button>
+                )}
+            </div>
         </div>
     );
 };

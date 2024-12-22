@@ -66,7 +66,7 @@ const server = setupServer(
     rest.get("/api/1.0/users", (req, res, ctx) => {
         const page = Number(req.url.searchParams.get("page")) || 0;
         const size = Number(req.url.searchParams.get("size")) || 0;
-        console.log(getPage(page, size));
+        // console.log(getPage(page, size));
         return res(ctx.status(200), ctx.json(getPage(page, size)));
     })
 );
@@ -102,9 +102,21 @@ describe("User List", () => {
         await screen.findByText("user1");
         const nextPageLink = screen.getByText(/next >/);
         await userAction.click(nextPageLink);
-        screen.getByText("user4");
         await userAction.click(nextPageLink);
-        screen.getByText("user7");
         expect(nextPageLink).not.toBeInTheDocument();
+    });
+    it("does not show previous page link when in first page", async () => {
+        render(<UserList />);
+        await screen.findByText("user1");
+        const previousePageLink = screen.queryByText(/< previous/);
+        expect(previousePageLink).not.toBeInTheDocument();
+    });
+    it("display previous page after clicking previous page link", async () => {
+        render(<UserList />);
+        await screen.findByText("user1");
+        await userAction.click(screen.getByText(/next >/));
+        expect(screen.getByText("user4")).toBeInTheDocument();
+        await userAction.click(screen.getByText(/< previous/));
+        expect(screen.getByText("user1")).toBeInTheDocument();
     });
 });
