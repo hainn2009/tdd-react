@@ -4,5 +4,8 @@
     "email": "Thư điện tử",
     "password": "Mật khẩu",
     "passwordRepeat": "Xác nhận mật khẩu",
-    "passwordMismatchValidation": "Mật khẩu và mật khẩu xác nhận chưa trùng khớp"
+    "passwordMismatchValidation": "Mật khẩu và mật khẩu xác nhận chưa trùng khớp",
+    "users": "Người dùng",
+    "nextPage": "trang sau >",
+    "previousPage": "< trang trước"
 }

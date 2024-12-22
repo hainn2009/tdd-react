@@ -4,6 +4,9 @@ import { rest } from "msw";
 import UserList from "./UserList";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
+import en from "../locale/en.json";
+import vn from "../locale/vn.json";
+import LanguageSelector from "./LanguageSelector";
 
 const users = [
     {
@@ -85,45 +88,72 @@ describe("User List", () => {
         render(
             <MemoryRouter>
                 <UserList />
+                <LanguageSelector />
             </MemoryRouter>
         );
     };
-    it("Display three users in list", async () => {
-        setup();
-        const users = await screen.findAllByText(/user/);
-        expect(users.length).toBe(3);
+    describe("Interactions", () => {
+        it("Display three users in list", async () => {
+            setup();
+            const users = await screen.findAllByText(/user/);
+            expect(users.length).toBe(3);
+        });
+        it("display next page link", async () => {
+            setup();
+            await screen.findByText("user1");
+            expect(screen.getByText(/next >/)).toBeInTheDocument();
+        });
+        it("display next page after clicking on next page link", async () => {
+            setup();
+            await screen.findByText("user1");
+            await userAction.click(screen.getByText(/next >/));
+            expect(screen.getByText("user4")).toBeInTheDocument();
+        });
+        it("hide next page link at last page", async () => {
+            setup();
+            await screen.findByText("user1");
+            const nextPageLink = screen.getByText(/next >/);
+            await userAction.click(nextPageLink);
+            await userAction.click(nextPageLink);
+            expect(nextPageLink).not.toBeInTheDocument();
+        });
+        it("does not show previous page link when in first page", async () => {
+            setup();
+            await screen.findByText("user1");
+            const previousePageLink = screen.queryByText(/< previous/);
+            expect(previousePageLink).not.toBeInTheDocument();
+        });
+        it("display previous page after clicking previous page link", async () => {
+            setup();
+            await screen.findByText("user1");
+            await userAction.click(screen.getByText(/next >/));
+            expect(screen.getByText("user4")).toBeInTheDocument();
+            await userAction.click(screen.getByText(/< previous/));
+            expect(screen.getByText("user1")).toBeInTheDocument();
+        });
     });
-    it("display next page link", async () => {
-        setup();
-        await screen.findByText("user1");
-        expect(screen.getByText(/next >/)).toBeInTheDocument();
-    });
-    it("display next page after clicking on next page link", async () => {
-        setup();
-        await screen.findByText("user1");
-        await userAction.click(screen.getByText(/next >/));
-        expect(screen.getByText("user4")).toBeInTheDocument();
-    });
-    it("hide next page link at last page", async () => {
-        setup();
-        await screen.findByText("user1");
-        const nextPageLink = screen.getByText(/next >/);
-        await userAction.click(nextPageLink);
-        await userAction.click(nextPageLink);
-        expect(nextPageLink).not.toBeInTheDocument();
-    });
-    it("does not show previous page link when in first page", async () => {
-        setup();
-        await screen.findByText("user1");
-        const previousePageLink = screen.queryByText(/< previous/);
-        expect(previousePageLink).not.toBeInTheDocument();
-    });
-    it("display previous page after clicking previous page link", async () => {
-        setup();
-        await screen.findByText("user1");
-        await userAction.click(screen.getByText(/next >/));
-        expect(screen.getByText("user4")).toBeInTheDocument();
-        await userAction.click(screen.getByText(/< previous/));
-        expect(screen.getByText("user1")).toBeInTheDocument();
+    describe("Internalization", () => {
+        beforeEach(() => {
+            server.use(
+                rest.get("/api/1.0/users", (req, res, ctx) => {
+                    return res(ctx.status(200), ctx.json(getPage(1, 3)));
+                })
+            );
+        });
+        it("initially display header and navigation links in English", async () => {
+            setup();
+            await screen.findByText("user4");
+            expect(screen.getByText(en.users)).toBeInTheDocument();
+            expect(screen.getByText(en.nextPage)).toBeInTheDocument();
+            expect(screen.getByText(en.previousPage)).toBeInTheDocument();
+        });
+        it("display header and navigation links in Vietnamese after selecting the language", async () => {
+            setup();
+            await screen.findByText("user4");
+            await userAction.click(screen.getByTitle("Tiếng Việt"));
+            expect(screen.getByText(vn.users)).toBeInTheDocument();
+            expect(screen.getByText(vn.nextPage)).toBeInTheDocument();
+            expect(screen.getByText(vn.previousPage)).toBeInTheDocument();
+        });
     });
 });
