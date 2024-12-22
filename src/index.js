@@ -1,19 +1,17 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import "./index.css";
 import { router } from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./locale/i18n";
 import { RouterProvider } from "react-router-dom";
+import { createRoot } from "react-dom/client";
 
-ReactDOM.render(
+const container = document.getElementById("root");
+const root = createRoot(container);
+root.render(
     <React.StrictMode>
-        {/* <UserSignupPage actions={actions} /> */}
-        {/* <LoginPage /> */}
-        {/* <App /> */}
         <RouterProvider router={router} />
-    </React.StrictMode>,
-    document.getElementById("root")
+    </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -36,7 +36,7 @@ const UserList = () => {
             <ul className="list-group list-group-flush">
                 {result &&
                     content.map((user: User) => {
-                        return <UserListItem user={user} />;
+                        return <UserListItem key={user.id} user={user} />;
                     })}
             </ul>
             <div className="card-footer">

@@ -10,7 +10,7 @@ export type User = {
 const UserListItem: React.FC<{ user: User }> = ({ user: { id, username } }) => {
     const navigate = useNavigate();
     return (
-        <li className="list-group-item list-group-item-action" style={{ cursor: "pointer" }} key={id} onClick={() => navigate(`/user/${id}`)}>
+        <li className="list-group-item list-group-item-action" style={{ cursor: "pointer" }} onClick={() => navigate(`/user/${id}`)}>
             <img src={defaultProfileImage} alt="profile" width={30} className="rounded-circle shadow-sm" />
             {username}
         </li>
